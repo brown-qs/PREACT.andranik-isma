@@ -23,7 +23,8 @@
     "build": "cross-env NODE_ENV=production webpack",
     "lint": "eslint src/**/*.{tsx,ts}",
     "test": "jest",
-    "analyzer": "webpack --profile --json > stats.json && webpack-bundle-analyzer stats.json dist -s gzip"
+    "analyzer": "webpack --profile --json > stats.json && webpack-bundle-analyzer stats.json dist -s gzip",
+    "heroku-prebuild": "npm install --dev"
   },
   "dependencies": {
     "history": "^4.10.1",
