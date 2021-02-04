@@ -76,9 +76,10 @@ const Register: FunctionalComponent = () => {
               <fieldset className="form-group">
                 <select
                   value={form.password}
-                  className="form-control-lg"
+                  className="form-control form-control-lg"
                   required
                   placeholder="Defalt Language"
+                  size={0}
                 >
                   <option>Armenian</option>
                   <option>English</option>
