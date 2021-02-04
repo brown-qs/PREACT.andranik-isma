@@ -5,7 +5,8 @@ import { getArticles, getArticlesByTag, getFeeds } from '../services'
 import ArticlePreview from '../components/ArticlePreview'
 import { useEffect, useState } from 'preact/hooks'
 import Pagination from '../components/Pagination'
-import { getCurrentUrl } from 'preact-router'
+import { getCurrentUrl, route } from 'preact-router'
+import { useRootState } from '../store'
 
 interface HomeProps {
   tag?: string;
@@ -15,6 +16,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
   const [articles, setArticles] = useState<Article[]>([])
   const [articlesCount, setArticlesCount] = useState(0)
   const [page, setPage] = useState(1)
+  const [{ user }] = useRootState()
 
   const currentActive = getCurrentUrl() === '/my-feeds' ? 'personal' : props.tag ? 'tag' : 'global'
 
@@ -53,6 +55,10 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
     fetchFeeds()
   }, [page, currentActive])
 
+  useEffect(() => {
+    if (!user) route('/login')
+  }, [user])
+
   return (
     <div className="home-page">
 
@@ -69,11 +75,11 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
           <div className="col-md-9">
             <NavBar currentActive={currentActive} {...{ tag: props.tag }} />
 
-            {articles.map((article, index) => (
+            {/* {articles.map((article, index) => (
               <ArticlePreview key={article.slug} article={article} setArticle={article => setArticle(index, article)} />
             ))}
 
-            <Pagination count={articlesCount} page={page} setPage={setPage} />
+            <Pagination count={articlesCount} page={page} setPage={setPage} /> */}
           </div>
 
           <div className="col-md-3">

@@ -22,7 +22,7 @@ const NavBar: FunctionalComponent<NavBarProps> = (props) => {
         )}
         <li className="nav-item">
           <a className={`nav-link ${props.currentActive === 'global' ? 'active' : ''}`} href="/">
-            Global Feed
+            Search in Knowbot
           </a>
         </li>
         {props.currentActive === 'tag' && (
