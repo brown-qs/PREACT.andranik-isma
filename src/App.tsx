@@ -11,23 +11,28 @@ import Profile from './pages/Profile'
 import Footer from './components/Footer'
 import { FunctionalComponent, h } from 'preact'
 import { createHashHistory } from 'history'
+import { ThemeProvider } from '@material-ui/core/styles'
+import CSSBaseline from '@material-ui/core/CssBaseline'
+import theme from './theme'
 
 const App: FunctionalComponent = () => (
   <RootProvider>
-    <Header />
-    <Router history={createHashHistory()}>
-      <Route path="/" component={Home} />
-      <Route path="/my-feeds" component={Home} />
-      <Route path="/tag/:tag" component={Home} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      <Route path="/settings" component={Settings} />
-      <Route path="/article/create" component={EditArticle} />
-      <Route path="/article/:slug/edit" component={EditArticle} />
-      <Route path="/article/:slug" component={ArticlePage} />
-      <Route path="/:username/favorites" component={Profile} />
-    </Router>
-    <Footer />
+    <ThemeProvider theme={theme}>
+      <Header />
+      <Router history={createHashHistory()}>
+        <Route path="/" component={Home} />
+        <Route path="/my-feeds" component={Home} />
+        <Route path="/tag/:tag" component={Home} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/article/create" component={EditArticle} />
+        <Route path="/article/:slug/edit" component={EditArticle} />
+        <Route path="/article/:slug" component={ArticlePage} />
+        <Route path="/:username/favorites" component={Profile} />
+      </Router>
+      <Footer />
+    </ThemeProvider>
   </RootProvider>
 )
 export default App

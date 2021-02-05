@@ -24,6 +24,8 @@ report.*.json
 /coverage
 
 # Build files
+/.cache
+/build
 /dist
 /stats.json
 

@@ -1,6 +1,8 @@
 import { Fragment, FunctionalComponent, h } from 'preact'
-import { Link } from 'preact-router'
 import useAllTags from '../hooks/useAllTags'
+import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
+import MoreVert from '@material-ui/icons/MoreVert'
 
 const PopularTags: FunctionalComponent = () => {
   const { tags } = useAllTags()
@@ -8,7 +10,9 @@ const PopularTags: FunctionalComponent = () => {
   return (
     <Fragment>
       <div className="card">
-        <div className="card-header"><b>Program/Comment Search</b></div>
+        <div className="card-header">
+          <b>Program/Comment Search</b>
+        </div>
         <div className="card-block">
           <fieldset className="form-group">
             <label>Word</label>
@@ -18,10 +22,14 @@ const PopularTags: FunctionalComponent = () => {
               placeholder="Enter Word for Search"
             />
           </fieldset>
-          <hr/>
+          <hr />
           <fieldset className="form-group">
             <label>Languages</label>
-            <select size={0} className="form-control form-control-sm" id="inputGroupSelect01">
+            <select
+              size={0}
+              className="form-control form-control-sm"
+              id="inputGroupSelect01"
+            >
               <option selected>ALL</option>
               <option value="1">One</option>
               <option value="2">Two</option>
@@ -30,7 +38,11 @@ const PopularTags: FunctionalComponent = () => {
           </fieldset>
           <fieldset className="form-group">
             <label>Program Type</label>
-            <select size={0} className="form-control form-control-sm" id="inputGroupSelect01">
+            <select
+              size={0}
+              className="form-control form-control-sm"
+              id="inputGroupSelect01"
+            >
               <option selected>ANY</option>
               <option value="1">One</option>
               <option value="2">Two</option>
@@ -39,14 +51,18 @@ const PopularTags: FunctionalComponent = () => {
           </fieldset>
           <fieldset className="form-group">
             <label>Program Stage</label>
-            <select size={0} className="form-control form-control-sm" id="inputGroupSelect01">
+            <select
+              size={0}
+              className="form-control form-control-sm"
+              id="inputGroupSelect01"
+            >
               <option selected>ANY</option>
               <option value="1">One</option>
               <option value="2">Two</option>
               <option value="3">Three</option>
             </select>
           </fieldset>
-          <hr/>
+          <hr />
           <fieldset className="form-group">
             <label>Search Text in Program Body</label>
             <input
@@ -55,7 +71,7 @@ const PopularTags: FunctionalComponent = () => {
               placeholder="Enter text of Program Body"
             />
           </fieldset>
-          <hr/>
+          <hr />
           <fieldset className="form-group">
             <label>Search Text in Comment Body</label>
             <input
@@ -64,18 +80,19 @@ const PopularTags: FunctionalComponent = () => {
               placeholder="Enter text of Comment Body"
             />
           </fieldset>
-          <a href="#" className="btn btn-link">
-            Advanced
-          </a>
-          <a href="#" className="btn btn-secondary btn-sm pull-sm-right">
-            Clear Inputs
-          </a> <br/>
-          <a href="#" className="btn btn-primary btn-sm btn-block">
-            Go
-          </a>
+          <Button size="small" color="primary" startIcon={<MoreVert/>}>
+            Advanced Search
+          </Button>
+          <Box mt={3} mb={1}>
+            <Button variant="outlined" size="small" color="primary" fullWidth>
+              Clear Inputs
+            </Button>
+          </Box>
+          <Button variant="contained" size="small" color="primary" fullWidth>
+            Search
+          </Button>
         </div>
       </div>
-
     </Fragment>
   )
 }

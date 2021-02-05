@@ -19,13 +19,19 @@
   },
   "main": "src/index.tsx",
   "scripts": {
-    "start": "webpack-dev-server",
-    "build": "cross-env NODE_ENV=production webpack",
+    "start": "(if exist build rmdir build /s/q) && parcel -p 4000 public/index.html --out-dir build",
+    "build": "(if exist build rmdir build /s/q) && parcel build public/index.html --out-dir build",
     "lint": "eslint src/**/*.{tsx,ts}",
-    "test": "jest",
-    "analyzer": "webpack --profile --json > stats.json && webpack-bundle-analyzer stats.json dist -s gzip"
+    "test": "jest"
+  },
+  "alias": {
+    "react": "preact/compat",
+    "react-dom": "preact/compat"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@types/react": "^17.0.1",
     "history": "^4.10.1",
     "preact": "^10.1.0",
     "preact-router": "^3.1.0"
@@ -36,10 +42,10 @@
     "@types/jest": "^25.1.4",
     "@types/jsdom": "^16.1.0",
     "@types/mockjs": "^1.0.2",
+    "@types/parcel-env": "^0.0.0",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
     "cross-env": "^7.0.2",
-    "dotenv-webpack": "^1.7.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-preact-pure": "^2.2.0",
     "eslint": "^6.6.0",
@@ -62,10 +68,11 @@
     "ts-jest": "^25.2.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
-    "webpack": "^4.41.2",
-    "webpack-bundle-analyzer": "^3.6.0",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "parcel": "^1.12.4",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-bundle-visualiser": "^1.2.0",
+    "parcel-plugin-clean-dist": "^0.0.6",
+    "parcel-plugin-compress": "^2.0.2"
   },
   "husky": {
     "hooks": {
