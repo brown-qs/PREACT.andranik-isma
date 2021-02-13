@@ -13,9 +13,11 @@ import Input from "@material-ui/core/Input";
 import Grid from "@material-ui/core/Grid";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import RadioGroup from '@material-ui/core/RadioGroup'
-import Radio from '@material-ui/core/Radio'
-const ConceptSearch: FunctionalComponent = () => {
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from "@material-ui/core/Radio";
+import connectStore from "../store/connect";
+
+const ConceptSearch: FunctionalComponent = (props) => {
   const { tags } = useAllTags();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
@@ -33,7 +35,12 @@ const ConceptSearch: FunctionalComponent = () => {
         <Grid item xs={8}>
           <FormControl fullWidth size="small">
             <InputLabel>Searching Text</InputLabel>
-            <Input value={text} />
+            <Input
+              value={props.conceptSearch.searchingText}
+              onChange={(e) => {
+                props.updateConceptSearch({ searchingText: e.target.value });
+              }}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={4}>
@@ -148,4 +155,4 @@ const ConceptSearch: FunctionalComponent = () => {
   );
 };
 
-export default ConceptSearch;
+export default connectStore()(ConceptSearch);

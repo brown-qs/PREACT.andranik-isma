@@ -1,12 +1,14 @@
 import createStore from "redux-zero";
-import parseStorageGet from '../utils/parse-storage-get'
+import parseStorageGet from "../utils/parse-storage-get";
 
 const appStore = (createStore as any)({
-  user: parseStorageGet('user') || null,
+  user: parseStorageGet("user") || null,
   orders: [],
-  errors: '',
+  errors: "",
   words: [],
   currentWord: {},
+
+  conceptSearch: { searchingText: "" },
 });
 
-export default appStore
+export default appStore;

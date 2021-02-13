@@ -123,6 +123,7 @@ const SearchPanel: FunctionalComponent = (props) => {
                 fullWidth
                 size="large"
                 onClick={() => {
+                  props.doConceptSearch();
                 }}
               >
                 Search

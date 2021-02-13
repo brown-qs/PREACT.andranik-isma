@@ -1,5 +1,5 @@
 import { request } from "../services";
-import { postLogin, PostLoginForm } from "../services";
+import { postLogin, PostLoginForm, postSearch } from "../services";
 
 const actions = (store) => ({
   setErrors: (state, val) => {
@@ -26,13 +26,14 @@ const actions = (store) => ({
     try {
       const user = await postLogin(form);
       actions(store).updateUser(state, user);
-      actions(store).setErrors(state, '');
+      actions(store).setErrors(state, "");
     } catch (e) {
       actions(store).setErrors(state, e.errors);
     }
   },
   addWord: (state, newWord) => {
-    let words = [...state.words]; words.push(newWord);
+    let words = [...state.words];
+    words.push(newWord);
     store.setState({
       words,
       currentWord: newWord,
@@ -46,6 +47,14 @@ const actions = (store) => ({
   },
   setCurrentWord: (state, word) => {
     store.setState({ currentWord: word });
+  },
+
+  updateConceptSearch: (state, updates) => {
+    store.setState({ conceptSearch: { ...state.conceptSearch, ...updates } });
+  },
+
+  doConceptSearch: async (state) => {
+    const results = await postSearch(state.conceptSearch);
   },
 });
 
