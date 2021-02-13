@@ -10,12 +10,13 @@ export const request = new FetchRequest({
 })
 
 export interface PostLoginForm {
-  email: string;
+  username: string;
   password: string;
+  language: string;
 }
 
 export async function postLogin (form: PostLoginForm) {
-  return request.post<UserResponse>('/users/login', { user: form }).then(res => res.user)
+  return request.post<UserResponse>('/login', { user: form }).then(res => res.user)
 }
 
 interface PostRegisterForm extends PostLoginForm {

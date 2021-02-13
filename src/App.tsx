@@ -1,38 +1,29 @@
-import { RootProvider } from './store'
-import Header from './components/Header'
-import Router, { Route } from 'preact-router'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Settings from './pages/Settings'
-import ArticlePage from './pages/ArticlePage'
-import EditArticle from './pages/EditArticle'
-import Profile from './pages/Profile'
-import Footer from './components/Footer'
-import { FunctionalComponent, h } from 'preact'
-import { createHashHistory } from 'history'
-import { ThemeProvider } from '@material-ui/core/styles'
-import CSSBaseline from '@material-ui/core/CssBaseline'
-import theme from './theme'
+// import { RootProvider } from './store'
+import Header from "./components/Header";
+import Router, { Route } from "preact-router";
+import Home from "./pages/Home";
+import SignIn from "./pages/SignIn";
+import Administration from "./pages/Administration";
+import Task from "./pages/Task";
+import { FunctionalComponent, h } from "preact";
+import { createHashHistory } from "history";
+import { ThemeProvider } from "@material-ui/core/styles";
+import CSSBaseline from "@material-ui/core/CssBaseline";
+import theme from "./theme";
+import appStore from "./store/store";
+import { Provider } from "redux-zero/preact";
 
-const App: FunctionalComponent = () => (
-  <RootProvider>
+const App: FunctionalComponent = (props) => (
+  <Provider store={appStore}>
     <ThemeProvider theme={theme}>
       <Header />
       <Router history={createHashHistory()}>
         <Route path="/" component={Home} />
-        <Route path="/my-feeds" component={Home} />
-        <Route path="/tag/:tag" component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <Route path="/settings" component={Settings} />
-        <Route path="/article/create" component={EditArticle} />
-        <Route path="/article/:slug/edit" component={EditArticle} />
-        <Route path="/article/:slug" component={ArticlePage} />
-        <Route path="/:username/favorites" component={Profile} />
+        <Route path="/task" component={Task} />
+        <Route path="/login" component={SignIn} />
+        <Route path="/administration" component={Administration} />
       </Router>
-      <Footer />
     </ThemeProvider>
-  </RootProvider>
-)
-export default App
+  </Provider>
+);
+export default App;

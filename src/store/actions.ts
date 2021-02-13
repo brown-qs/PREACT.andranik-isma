@@ -1,17 +1,52 @@
-import { postLogin, PostLoginForm } from '../services'
-import { SET_ERRORS, UPDATE_USER } from './constants'
+import { request } from "../services";
+import { postLogin, PostLoginForm } from "../services";
 
-export const login = async (form: PostLoginForm): Promise<Action> => {
-  try {
-    const user = await postLogin(form)
-    return {
-      type: UPDATE_USER,
-      user,
+const actions = (store) => ({
+  setErrors: (state, val) => {
+    store.setState({ errors: val });
+  },
+  cleanErrors: (state) => {
+    store.setState({ errors: {} });
+  },
+  updateUser: (state, user) => {
+    if (!user) {
+      // logout
+      global.localStorage.removeItem("user");
+      request.options.headers.Authorization = "";
+      store.setState({ user: undefined });
+    } else {
+      // login
+      user = Object.assign({}, state.user, user) as User;
+      global.localStorage.setItem("user", JSON.stringify(user));
+      request.options.headers.Authorization = `Token ${user.token}`;
+      store.setState({ user });
     }
-  } catch (e) {
-    return {
-      type: SET_ERRORS,
-      errors: e.errors,
+  },
+  login: async (state, form: PostLoginForm) => {
+    try {
+      const user = await postLogin(form);
+      actions(store).updateUser(state, user);
+      actions(store).setErrors(state, '');
+    } catch (e) {
+      actions(store).setErrors(state, e.errors);
     }
-  }
-}
+  },
+  addWord: (state, newWord) => {
+    let words = [...state.words]; words.push(newWord);
+    store.setState({
+      words,
+      currentWord: newWord,
+    });
+  },
+  removeWord: (state, wordId) => {
+    if (wordId == state.currentWord.id) store.setState({ currentWord: {} });
+    store.setState({
+      words: [...state.words].filter((val) => val.id != wordId),
+    });
+  },
+  setCurrentWord: (state, word) => {
+    store.setState({ currentWord: word });
+  },
+});
+
+export default actions;

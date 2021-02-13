@@ -30,11 +30,18 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/data-grid": "^4.0.0-alpha.18",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/x-grid-data-generator": "^4.0.0-alpha.18",
     "@types/react": "^17.0.1",
     "history": "^4.10.1",
+    "material-table": "^1.69.2",
+    "material-ui-flags": "^1.2.4",
     "preact": "^10.1.0",
-    "preact-router": "^3.1.0"
+    "preact-router": "^3.1.0",
+    "react-beautiful-dnd": "^13.0.0",
+    "redux-zero": "^5.1.7"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.3",
@@ -43,6 +50,7 @@
     "@types/jsdom": "^16.1.0",
     "@types/mockjs": "^1.0.2",
     "@types/parcel-env": "^0.0.0",
+    "@types/react-beautiful-dnd": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
     "cross-env": "^7.0.2",
@@ -63,25 +71,16 @@
     "jsdom": "^16.2.0",
     "lint-staged": "^10.0.8",
     "mockjs": "^1.1.0",
-    "preact-render-to-string": "^5.1.1",
-    "prettier": "^1.19.1",
-    "ts-jest": "^25.2.1",
-    "ts-loader": "^6.2.1",
-    "typescript": "^3.7.2",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
     "parcel-plugin-clean-dist": "^0.0.6",
-    "parcel-plugin-compress": "^2.0.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn test"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": "eslint --fix"
+    "parcel-plugin-compress": "^2.0.2",
+    "preact-render-to-string": "^5.1.1",
+    "prettier": "^1.19.1",
+    "ts-jest": "^25.2.1",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2"
   },
   "eslintConfig": {
     "env": {

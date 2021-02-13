@@ -1,6 +1,5 @@
 import { CLEAN_ERRORS, SET_ERRORS, UPDATE_USER } from './constants'
 import { request } from '../services'
-
 const reducer = (state: RootState, action: Action): RootState => {
   switch (action.type) {
     case SET_ERRORS: {

@@ -1,4 +1,4 @@
-import PopularTags from '../PopularTags'
+import PopularTags from '../SearchPanel'
 import { shallow } from 'enzyme'
 import { h } from 'preact'
 import { getAllTags } from '../../services'

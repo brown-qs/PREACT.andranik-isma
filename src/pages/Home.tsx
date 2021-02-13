@@ -1,94 +1,165 @@
-import { FunctionalComponent, h } from 'preact'
-import NavBar from '../components/NavBar'
-import PopularTags from '../components/PopularTags'
-import { getArticles, getArticlesByTag, getFeeds } from '../services'
-import ArticlePreview from '../components/ArticlePreview'
-import { useEffect, useState } from 'preact/hooks'
-import Pagination from '../components/Pagination'
-import { getCurrentUrl, route } from 'preact-router'
-import { useRootState } from '../store'
+import { FunctionalComponent, h, Fragment } from "preact";
+import SearchPanel from "../components/SearchPanel";
+import { useEffect, useState } from "preact/hooks";
+import { getCurrentUrl, route } from "preact-router";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import WordSynonym from "../components/WordSynonym";
+import WordSemantic from "../components/WordSemantic";
+import WordPrograms from "../components/WordPrograms";
+import WordDescription from "../components/WordDescription";
+import WordDefinition from "../components/WordDefinition";
+import Avatar from "@material-ui/core/Avatar";
+import connectStore from "../store/connect";
+import Box from "@material-ui/core/Box";
+import Paper from "@material-ui/core/Paper";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import SaveIcon from "@material-ui/icons/Save";
+import Tooltip from "@material-ui/core/Tooltip";
+import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
+import DeleteIcon from "@material-ui/icons/Delete";
+import CreateIcon from "@material-ui/icons/Create";
+import CloseIcon from "@material-ui/icons/Close";
+import { Card, Chip, Button } from "../components/StyledMui";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import SearchIcon from "@material-ui/icons/Search";
 
-interface HomeProps {
-  tag?: string;
-}
+interface HomeProps {}
 
 const Home: FunctionalComponent<HomeProps> = (props) => {
-  const [articles, setArticles] = useState<Article[]>([])
-  const [articlesCount, setArticlesCount] = useState(0)
-  const [page, setPage] = useState(1)
-  const [{ user }] = useRootState()
-
-  const currentActive = getCurrentUrl() === '/my-feeds' ? 'personal' : props.tag ? 'tag' : 'global'
-
-  const fetchFeeds = async () => {
-    setArticles([])
-    setArticlesCount(0)
-
-    switch (currentActive) {
-      case 'global': {
-        const { articles = [], articlesCount = 0 } = await getArticles(page)
-        setArticles(articles)
-        setArticlesCount(articlesCount)
-        break
-      }
-      case 'tag': {
-        const { articles = [], articlesCount = 0 } = await getArticlesByTag(props.tag!, page)
-        setArticles(articles)
-        setArticlesCount(articlesCount)
-        break
-      }
-      case 'personal': {
-        const { articles = [], articlesCount = 0 } = await getFeeds(page)
-        setArticles(articles)
-        setArticlesCount(articlesCount)
-      }
-    }
-  }
-
-  const setArticle = (articleIndex: number, article: Article) => {
-    const articlesCopy = [...articles]
-    articlesCopy[articleIndex] = article
-    setArticles(articlesCopy)
-  }
+  const { user } = props;
+  const [tab, setTab] = useState("syn");
+  const [modalIdOpen, setModalIdOpen] = useState(false);
 
   useEffect(() => {
-    fetchFeeds()
-  }, [page, currentActive])
-
-  useEffect(() => {
-    if (!user) route('/login')
-  }, [user])
+    if (!user) route("/login");
+  }, [user]);
 
   return (
-    <div className="home-page">
+    <Container maxWidth="lg">
+      <Grid container spacing={1}>
+        <Grid item xs={11}>
+          {props.words.map((word, index) => (
+            <Chip
+              mr={1}
+              key={index}
+              avatar={<Avatar src="https://flagcdn.com/w20/us.png" />}
+              label={word.word}
+              color={props.currentWord.id == word.id ? "primary" : "default"}
+              onClick={() => {
+                props.setCurrentWord(word);
+              }}
+              onDelete={() => {
+                props.removeWord(word.id);
+              }}
+            />
+          ))}
+        </Grid>
+        <Grid item xs={1}>
+          <IconButton
+            color={props.currentWord.word ? "default" : "primary"}
+            onClick={() => {
+              props.setCurrentWord({});
+            }}
+          >
+            <SearchIcon style={{ fontSize: 40, fontWeight: 700 }} />
+          </IconButton>
+        </Grid>
+      </Grid>
 
-      <div className="banner">
-        <div className="container">
-          <h1 className="logo-font">ISMAWebEditor</h1>
-          <p>A place to share your knowledge.</p>
-        </div>
-      </div>
-
-      <div className="container page">
-        <div className="row">
-
-          <div className="col-md-9">
-            <NavBar currentActive={currentActive} {...{ tag: props.tag }} />
-
-            {/* {articles.map((article, index) => (
-              <ArticlePreview key={article.slug} article={article} setArticle={article => setArticle(index, article)} />
-            ))}
-
-            <Pagination count={articlesCount} page={page} setPage={setPage} /> */}
-          </div>
-
-          <div className="col-md-3">
-            <PopularTags />
-          </div>
-
-        </div>
-      </div>
-    </div>
-  )
-}
-export default Home
+      {props.currentWord.word ? (
+        <Card elevation={10} mt={5}>
+          <CardHeader
+            action={
+              <Fragment>
+                <Tooltip title="Save">
+                  <IconButton aria-label="save" color="primary">
+                    <SaveIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Test">
+                  <IconButton aria-label="test">
+                    <AssignmentTurnedInIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="New Concept">
+                  <IconButton aria-label="new">
+                    <CreateIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete Concept">
+                  <IconButton aria-label="delete" color="secondary">
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Show ID">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={() => {
+                      setModalIdOpen(true);
+                    }}
+                  >
+                    ID
+                  </Button>
+                </Tooltip>
+                <Dialog
+                  open={modalIdOpen}
+                  onClose={() => {
+                    setModalIdOpen(false);
+                  }}
+                >
+                  <DialogContent>
+                    The Current Concept Id is 1_7316
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setModalIdOpen(false)}>OK</Button>
+                  </DialogActions>
+                </Dialog>
+              </Fragment>
+            }
+            title={props.currentWord.word}
+            subheader="Edit things"
+          />
+          <Tabs
+            value={tab}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={(e, newVal) => {
+              setTab(newVal);
+            }}
+            aria-label="disabled tabs example"
+            scrollButtons="on"
+            variant="fullWidth"
+          >
+            <Tab label={"Synonym"} value={"syn"} />
+            <Tab label={"Semantic"} value={"sema"} />
+            <Tab label={"Programs"} value={"prog"} />
+            <Tab label={"Desription"} value={"desc"} />
+            <Tab label={"Definitions"} value={"def"} />
+          </Tabs>
+          {tab == "syn" && <WordSynonym word={"tree"} />}
+          {tab == "sema" && <WordSemantic />}
+          {tab == "prog" && <WordPrograms />}
+          {tab == "desc" && <WordDescription />}
+          {tab == "def" && <WordDefinition />}
+          {/*<Pagination count={articlesCount} page={page} setPage={setPage} /> */}
+        </Card>
+      ) : (
+        <SearchPanel />
+      )}
+    </Container>
+  );
+};
+export default connectStore()(Home);
