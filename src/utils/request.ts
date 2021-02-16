@@ -39,7 +39,7 @@ export default class FetchRequest {
     return response.json()
       .then(json => {
         if (response.status >= 200 && response.status < 300) {
-          return json
+          return json.res
         }
         const error = new Error(response.statusText)
         Object.assign(error, json, {
@@ -64,6 +64,9 @@ export default class FetchRequest {
   }
 
   post<T = any> (url: string, data: Record<string, any> = {}, options: Partial<FetchRequestOptions> = {}): Promise<T> {
+
+    data = {defLang: parseStorageGet('user')?.defLang, body: data};
+
     options.headers = options.headers ?? {}
     const token = parseStorageGet('user')?.token
     if (token) options.headers.Authorization = `Token ${token}`

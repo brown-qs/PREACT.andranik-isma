@@ -16,6 +16,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import MaterialTable, { MTableToolbar } from "material-table";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import { SearchingProperties, RelationSearch } from "../types/class";
 
 interface AdvancedSearchDialogProps {
   open: boolean;
@@ -27,6 +28,9 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
 ) => {
   const [text, setText] = useState("");
   const [option, setOption] = useState("");
+  const [searchForm, setSearchForm] = useState<SearchingProperties>(
+    new SearchingProperties()
+  );
 
   return (
     <Dialog

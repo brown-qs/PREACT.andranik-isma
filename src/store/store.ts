@@ -2,13 +2,23 @@ import createStore from "redux-zero";
 import parseStorageGet from "../utils/parse-storage-get";
 
 const appStore = (createStore as any)({
+  /***
+   * System
+   */
+  loading: false,
+  /***
+   * Authentication
+   */
   user: parseStorageGet("user") || null,
-  orders: [],
   errors: "",
+
+  /***
+   * Knowledge Base
+   */
+  searchResults: [],
   words: [],
   currentWord: {},
-
-  conceptSearch: { searchingText: "" },
+  defLang: "",
 });
 
 export default appStore;

@@ -1,1 +1,40 @@
-export const DEFAULT_AVATAR = 'https://static.productionready.io/images/smiley-cyrus.jpg'
+export const DEFAULT_AVATAR =
+  "https://static.productionready.io/images/smiley-cyrus.jpg";
+export const LANGUAGE_MENU = [
+  "ALL",
+  "Armenian",
+  "English",
+  "WArmenian",
+  "Russian",
+  "OArmenian",
+  "Latin",
+  "Talyshi",
+  "Turkish",
+  "Germany",
+  "Qurdish",
+  "French",
+  "Zazaki",
+  "Hamshen",
+  "Lezgin",
+  "Yezid",
+  "Cherkess",
+  "Laz",
+  "Persian",
+  "Spanish",
+];
+export const ROLE_MENU = [
+  "ANY",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "16",
+  "23",
+];

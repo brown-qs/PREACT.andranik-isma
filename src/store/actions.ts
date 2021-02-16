@@ -1,12 +1,13 @@
 import { request } from "../services";
-import { postLogin, PostLoginForm, postSearch } from "../services";
+import { postLogin, postSearch } from "../services";
+import { DEF_LANG } from "../constants";
 
 const actions = (store) => ({
+  /***
+   * Authentication
+   */
   setErrors: (state, val) => {
     store.setState({ errors: val });
-  },
-  cleanErrors: (state) => {
-    store.setState({ errors: {} });
   },
   updateUser: (state, user) => {
     if (!user) {
@@ -22,14 +23,35 @@ const actions = (store) => ({
       store.setState({ user });
     }
   },
-  login: async (state, form: PostLoginForm) => {
+  login: async (state, form: any) => {
     try {
+      store.setState({ loading: true });
       const user = await postLogin(form);
-      actions(store).updateUser(state, user);
-      actions(store).setErrors(state, "");
+      store.setState({ loading: false });
+      if (user.id == 0) {
+        actions(store).setErrors(state, "Username or Password is incorrect.");
+      } else {
+        actions(store).updateUser(state, Object.assign({}, user, form));
+        actions(store).setErrors(state, "");
+      }
     } catch (e) {
       actions(store).setErrors(state, e.errors);
     }
+  },
+
+  /***
+   * Knowledge Base
+   */
+  doSearch: async (state, form: any) => {
+    store.setState({ loading: true });
+    const results = await postSearch({ form });
+    store.setState({ loading: false });
+    actions(store).setSearchResults(state, results);
+  },
+  setSearchResults: (state, result) => {
+    store.setState({
+      searchResults: result,
+    });
   },
   addWord: (state, newWord) => {
     let words = [...state.words];
@@ -47,14 +69,6 @@ const actions = (store) => ({
   },
   setCurrentWord: (state, word) => {
     store.setState({ currentWord: word });
-  },
-
-  updateConceptSearch: (state, updates) => {
-    store.setState({ conceptSearch: { ...state.conceptSearch, ...updates } });
-  },
-
-  doConceptSearch: async (state) => {
-    const results = await postSearch(state.conceptSearch);
   },
 });
 

@@ -13,17 +13,19 @@ import theme from "./theme";
 import appStore from "./store/store";
 import { Provider } from "redux-zero/preact";
 
-const App: FunctionalComponent = (props) => (
-  <Provider store={appStore}>
-    <ThemeProvider theme={theme}>
-      <Header />
-      <Router history={createHashHistory()}>
-        <Route path="/" component={Home} />
-        <Route path="/task" component={Task} />
-        <Route path="/login" component={SignIn} />
-        <Route path="/administration" component={Administration} />
-      </Router>
-    </ThemeProvider>
-  </Provider>
-);
+const App: FunctionalComponent = (props) => {
+  return (
+    <Provider store={appStore}>
+      <ThemeProvider theme={theme}>
+        <Header />
+        <Router history={createHashHistory()}>
+          <Route path="/" component={Home} />
+          <Route path="/task" component={Task} />
+          <Route path="/login" component={SignIn} />
+          <Route path="/administration" component={Administration} />
+        </Router>
+      </ThemeProvider>
+    </Provider>
+  );
+};
 export default App;

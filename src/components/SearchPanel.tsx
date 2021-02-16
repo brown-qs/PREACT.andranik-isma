@@ -20,9 +20,8 @@ import { useTheme } from "@material-ui/core/styles";
 import connectStore from "../store/connect";
 
 const SearchPanel: FunctionalComponent = (props) => {
-  const { tags } = useAllTags();
   const [search_mode, setSearchMode] = useState("concept");
-
+  const [searchClick, setSearchClick] = useState(0);
   const theme = useTheme();
 
   return (
@@ -50,33 +49,11 @@ const SearchPanel: FunctionalComponent = (props) => {
                 field: "roots",
               },
             ]}
-            data={[
-              {
-                id: 1,
-                lang: "English",
-                syn: 1,
-                word: "tree",
-                roots: "tree#",
-              },
-              {
-                id: 2,
-                lang: "English",
-                syn: 4,
-                word: "place",
-                roots: "tree#",
-              },
-              {
-                id: 3,
-                lang: "English",
-                syn: 2,
-                word: "wood",
-                roots: "tree#",
-              },
-            ]}
+            data={props.searchResults}
             options={{
               search: false,
               paging: false,
-              actionsColumnIndex: -1
+              actionsColumnIndex: -1,
             }}
           />
         </Grid>
@@ -103,8 +80,12 @@ const SearchPanel: FunctionalComponent = (props) => {
               }
             />
             <CardContent>
-              {search_mode == "concept" && <ConceptSearch />}
-              {search_mode == "program" && <ProgramSearch />}
+              {search_mode == "concept" && (
+                <ConceptSearch searchClick={searchClick} />
+              )}
+              {search_mode == "program" && (
+                <ProgramSearch searchClick={searchClick} />
+              )}
               <Box mt={3} mb={1}>
                 <Button
                   variant="outlined"
@@ -122,9 +103,7 @@ const SearchPanel: FunctionalComponent = (props) => {
                 color="primary"
                 fullWidth
                 size="large"
-                onClick={() => {
-                  props.doConceptSearch();
-                }}
+                onClick={() => setSearchClick((cur) => cur + 1)}
               >
                 Search
               </Button>

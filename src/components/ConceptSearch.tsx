@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from "preact";
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import useAllTags from "../hooks/useAllTags";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
@@ -16,12 +16,15 @@ import Checkbox from "@material-ui/core/Checkbox";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import connectStore from "../store/connect";
+import { LANGUAGE_MENU, ROLE_MENU } from "../constants";
+import { SearchingProperties, RelationSearch } from "../types/class";
 
 const ConceptSearch: FunctionalComponent = (props) => {
-  const { tags } = useAllTags();
   const [open, setOpen] = useState(false);
-  const [text, setText] = useState("");
-  const [language, setLanguage] = useState("all");
+  const [searchForm, setSearchForm] = useState<SearchingProperties>(
+    new SearchingProperties()
+  );
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -29,6 +32,13 @@ const ConceptSearch: FunctionalComponent = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (props.searchClick) {
+      props.doSearch(searchForm);
+    }
+  }, [props.searchClick]);
+
   return (
     <Fragment>
       <Grid container spacing={1}>
@@ -36,9 +46,9 @@ const ConceptSearch: FunctionalComponent = (props) => {
           <FormControl fullWidth size="small">
             <InputLabel>Searching Text</InputLabel>
             <Input
-              value={props.conceptSearch.searchingText}
+              value={searchForm.text}
               onChange={(e) => {
-                props.updateConceptSearch({ searchingText: e.target.value });
+                setSearchForm({ ...searchForm, text: e.target.value });
               }}
             />
           </FormControl>
@@ -47,74 +57,105 @@ const ConceptSearch: FunctionalComponent = (props) => {
           <FormControl fullWidth size="small">
             <InputLabel>Language</InputLabel>
             <Select
-              native
-              value={language}
+              value={searchForm.language}
               onChange={(e) => {
-                setLanguage(e.target.value);
+                setSearchForm({ ...searchForm, language: e.target.value });
               }}
             >
-              <option value={"all"}>ALL</option>
-              <option value={"english"}>English</option>
-              <option value={"english"}>Armenian</option>
-              <option value={"english"}>English</option>
-              <option value={"english"}>Armenian</option>
-              <option value={"english"}>English</option>
-              <option value={"english"}>Armenian</option>
+              {LANGUAGE_MENU.map((item, index) => (
+                <MenuItem value={index}>{item}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={6}>
           <FormControlLabel
             fullWidth
-            control={<Checkbox color="primary" name="checkedA" />}
-            label="As subtext"
+            control={
+              <Checkbox
+                color="primary"
+                name="checkedA"
+                value={searchForm.searchAsSubtext}
+                onChange={(e) => {
+                  setSearchForm({
+                    ...searchForm,
+                    searchAsSubtext: e.target.value,
+                  });
+                }}
+              />
+            }
+            label="Search as subtext"
           />
         </Grid>
         <Grid item xs={6}>
           <FormControlLabel
             fullWidth
             control={<Checkbox color="primary" name="checkedA" />}
-            label="In Roots"
+            label="Search in Roots"
+            value={searchForm.searchInRoots}
+            onChange={(e) => {
+              setSearchForm({ ...searchForm, searchInRoots: e.target.value });
+            }}
           />
         </Grid>
         <Grid item xs={4}>
           <FormControl fullWidth size="small">
             <InputLabel>Role</InputLabel>
             <Select
-              native
-              value={language}
+              value={searchForm.role}
               onChange={(e) => {
-                setLanguage(e.target.value);
+                setSearchForm({ ...searchForm, role: e.target.value });
               }}
             >
-              <option value={"all"}>ALL</option>
-              <option value={"english"}>English</option>
-              <option value={"english"}>Armenian</option>
+              {ROLE_MENU.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={4}>
           <FormControl fullWidth size="small">
             <InputLabel>Deformation Num</InputLabel>
-            <Input value={text} />
+            <Input
+              value={searchForm.defNumber}
+              onChange={(e) => {
+                setSearchForm({ ...searchForm, defNumber: e.target.value });
+              }}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={4}>
           <FormControl fullWidth size="small">
             <InputLabel>Concept Num</InputLabel>
-            <Input value={text} />
+            <Input
+              value={searchForm.id}
+              onChange={(e) => {
+                setSearchForm({ ...searchForm, id: e.target.value });
+              }}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth size="small">
             <InputLabel>Concept Name of Horizontal Relation</InputLabel>
-            <Input value={text} />
+            <Input
+              onChange={(e) => {
+                let rel: RelationSearch = new RelationSearch();
+                rel.conceptName = e.target.value;
+                setSearchForm({ ...searchForm, relations: [rel] });
+              }}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth size="small">
             <InputLabel>Class Name</InputLabel>
-            <Input value={text} />
+            <Input
+              value={searchForm.id}
+              onChange={(e) => {
+                setSearchForm({ ...searchForm, id: e.target.value });
+              }}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={12}>
@@ -122,15 +163,21 @@ const ConceptSearch: FunctionalComponent = (props) => {
             row
             aria-label="position"
             name="position"
-            defaultValue="top"
+            onChange={(e) => {
+              setSearchForm({
+                ...searchForm,
+                classInClasses: e.target.value == "classes",
+                classDist: e.target.value == "first" ? "1" : "",
+              });
+            }}
           >
             <FormControlLabel
-              value="top"
+              value="classes"
               control={<Radio color="primary" />}
               label="Classes"
             />
             <FormControlLabel
-              value="start"
+              value="all"
               control={<Radio color="primary" />}
               label="All Children"
             />

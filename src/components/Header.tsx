@@ -29,10 +29,23 @@ import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import { Tooltip } from "@material-ui/core";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: "#fff",
+    },
+  })
+);
 
 const Header: FunctionalComponent = (props) => {
   const [value, setValue] = useState(0);
   const theme = useTheme();
+  const classes = useStyles();
   const actions = [
     { value: "/", href: "/", label: "Knowledge Base", icon: <MenuBookItem /> },
     {
@@ -75,61 +88,71 @@ const Header: FunctionalComponent = (props) => {
     },
   ];
 
-  return props.user ? (
-    <Match path="/">
-      {({ matches, path, url }) => {
-        return (
-          <Fragment>
-            <AppBar position="sticky">
-              <BottomNavigation value={url}>
-                {actions.map((action) => (
-                  <BottomNavigationAction
-                    value={action.value}
-                    href={action.href}
-                    label={action.label}
-                    icon={action.icon}
-                  />
-                ))}
-              </BottomNavigation>
-            </AppBar>
-            <Box style={{ backgroundColor: theme.palette.primary.main }} mb={5}>
-              <Container>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item>
-                    <Typography
-                      variant="h1"
-                      style={{
-                        color: "white",
-                        fontFamily: "titillium web,sans-serif",
-                        textShadow: "0 1px 3px rgb(0 0 0 / 30%)",
-                      }}
-                      gutterBottom
-                    >
-                      {((_) => {
-                        let tab = actions.find((action) => action.href == url);
-                        return tab ? tab.label : "";
-                      })()}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Tooltip title="Log out">
-                      <IconButton
-                        style={{ color: "white" }}
-                        onClick={(_) => props.updateUser()}
-                      >
-                        <MeetingRoomIcon fontSize="large" />
-                      </IconButton>
-                    </Tooltip>
-                  </Grid>
-                </Grid>
-              </Container>
-            </Box>
-          </Fragment>
-        );
-      }}
-    </Match>
-  ) : (
-    <Fragment />
+  return (
+    <Fragment>
+      <Backdrop className={classes.backdrop} open={props.loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {props.user && (
+        <Match path="/">
+          {({ matches, path, url }) => {
+            return (
+              <Fragment>
+                <AppBar position="sticky">
+                  <BottomNavigation value={url}>
+                    {actions.map((action) => (
+                      <BottomNavigationAction
+                        value={action.value}
+                        href={action.href}
+                        label={action.label}
+                        icon={action.icon}
+                      />
+                    ))}
+                  </BottomNavigation>
+                </AppBar>
+                <Box
+                  style={{ backgroundColor: theme.palette.primary.main }}
+                  mb={5}
+                >
+                  <Container>
+                    <Grid container justify="space-between" alignItems="center">
+                      <Grid item>
+                        <Typography
+                          variant="h1"
+                          style={{
+                            color: "white",
+                            fontFamily: "titillium web,sans-serif",
+                            textShadow: "0 1px 3px rgb(0 0 0 / 30%)",
+                          }}
+                          gutterBottom
+                        >
+                          {((_) => {
+                            let tab = actions.find(
+                              (action) => action.href == url
+                            );
+                            return tab ? tab.label : "";
+                          })()}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Tooltip title="Log out">
+                          <IconButton
+                            style={{ color: "white" }}
+                            onClick={(_) => props.updateUser()}
+                          >
+                            <MeetingRoomIcon fontSize="large" />
+                          </IconButton>
+                        </Tooltip>
+                      </Grid>
+                    </Grid>
+                  </Container>
+                </Box>
+              </Fragment>
+            );
+          }}
+        </Match>
+      )}
+    </Fragment>
   );
 };
 

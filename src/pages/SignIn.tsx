@@ -72,9 +72,9 @@ const SignIn = (props) => {
   const formRef = createRef<HTMLFormElement>();
   const { user, errors } = props;
   const [form, setForm] = useState({
-    username: "",
+    userName: "",
     password: "",
-    language: "0",
+    defLang: "0",
   });
 
   const onLogin = async (event: Event) => {
@@ -109,11 +109,12 @@ const SignIn = (props) => {
               name="username"
               autoComplete="username"
               autoFocus
-              value={form.username}
+              error={props.errors != ''}
+              value={form.userName}
               onChange={(e) => {
                 setForm((prev) => ({
                   ...prev,
-                  username: e.currentTarget.value,
+                  userName: e.currentTarget.value,
                 }));
               }}
             />
@@ -142,34 +143,34 @@ const SignIn = (props) => {
               aria-label="position"
               name="position"
               defaultValue="top"
-              value={form.language}
+              value={form.defLang}
               onChange={(e) => {
                 setForm((prev) => ({
                   ...prev,
-                  language: e.currentTarget.value,
+                  defLang: e.currentTarget.value,
                 }));
               }}
             >
               <FormControlLabel
-                value="0"
+                value="1"
                 control={<Radio color="primary" />}
                 label="Armenian"
                 labelPlacement="bottom"
               />
               <FormControlLabel
-                value="1"
+                value="2"
                 control={<Radio color="primary" />}
                 label="English"
                 labelPlacement="bottom"
               />
               <FormControlLabel
-                value="2"
+                value="3"
                 control={<Radio color="primary" />}
                 label="Western Armenian"
                 labelPlacement="bottom"
               />
               <FormControlLabel
-                value="3"
+                value="4"
                 control={<Radio color="primary" />}
                 label="Russian"
                 labelPlacement="bottom"
