@@ -1,5 +1,5 @@
 import { request } from "../services";
-import { postLogin, postSearch } from "../services";
+import { postLogin, getSearch, getConcept } from "../services";
 import { DEF_LANG } from "../constants";
 
 const actions = (store) => ({
@@ -44,22 +44,37 @@ const actions = (store) => ({
    */
   doSearch: async (state, form: any) => {
     store.setState({ loading: true });
-    const results = await postSearch({ form });
-    store.setState({ loading: false });
-    actions(store).setSearchResults(state, results);
+    try {
+      const results = await getSearch({ form });
+      store.setState({ loading: false });
+      actions(store).setSearchResults(state, results);
+    } catch (e) {
+      store.setState({ loading: false });
+    }
   },
   setSearchResults: (state, result) => {
     store.setState({
       searchResults: result,
     });
   },
-  addWord: (state, newWord) => {
+  addWord: async (state, newWord) => {
     let words = [...state.words];
-    words.push(newWord);
-    store.setState({
-      words,
-      currentWord: newWord,
-    });
+    store.setState({ loading: true });
+    try {
+      const results = await getConcept({
+        userId: state.user.id,
+        conceptId: newWord.id,
+      });
+      store.setState({ loading: false });
+      newWord = { ...newWord, data: results.data };
+      words.push(newWord);
+      store.setState({
+        words,
+        currentWord: newWord.id,
+      });
+    } catch {
+      store.setState({ loading: false });
+    }
   },
   removeWord: (state, wordId) => {
     if (wordId == state.currentWord.id) store.setState({ currentWord: {} });
@@ -67,8 +82,8 @@ const actions = (store) => ({
       words: [...state.words].filter((val) => val.id != wordId),
     });
   },
-  setCurrentWord: (state, word) => {
-    store.setState({ currentWord: word });
+  setCurrentWord: (state, wordId) => {
+    store.setState({ currentWord: wordId });
   },
 });
 

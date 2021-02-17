@@ -17,8 +17,7 @@ const appStore = (createStore as any)({
    */
   searchResults: [],
   words: [],
-  currentWord: {},
-  defLang: "",
+  currentWord: null,
 });
 
 export default appStore;

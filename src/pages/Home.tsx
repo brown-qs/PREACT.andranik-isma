@@ -33,6 +33,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import SearchIcon from "@material-ui/icons/Search";
+import { currentWordData } from "../utils/redux-getters";
 
 interface HomeProps {}
 
@@ -53,11 +54,10 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
             <Chip
               mr={1}
               key={index}
-              avatar={<Avatar src="https://flagcdn.com/w20/us.png" />}
               label={word.word}
-              color={props.currentWord.id == word.id ? "primary" : "default"}
+              color={props.currentWord == word.id ? "primary" : "default"}
               onClick={() => {
-                props.setCurrentWord(word);
+                props.setCurrentWord(word.id);
               }}
               onDelete={() => {
                 props.removeWord(word.id);
@@ -67,9 +67,9 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
         </Grid>
         <Grid item xs={1}>
           <IconButton
-            color={props.currentWord.word ? "default" : "primary"}
+            color={props.currentWord ? "default" : "primary"}
             onClick={() => {
-              props.setCurrentWord({});
+              props.setCurrentWord(null);
             }}
           >
             <SearchIcon style={{ fontSize: 40, fontWeight: 700 }} />
@@ -77,7 +77,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
         </Grid>
       </Grid>
 
-      {props.currentWord.word ? (
+      {props.currentWord ? (
         <Card elevation={10} mt={5}>
           <CardHeader
             action={
@@ -129,7 +129,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
                 </Dialog>
               </Fragment>
             }
-            title={props.currentWord.word}
+            title={currentWordData(props).word}
             subheader="Edit things"
           />
           <Tabs
@@ -149,7 +149,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
             <Tab label={"Desription"} value={"desc"} />
             <Tab label={"Definitions"} value={"def"} />
           </Tabs>
-          {tab == "syn" && <WordSynonym word={"tree"} />}
+          {tab == "syn" && <WordSynonym />}
           {tab == "sema" && <WordSemantic />}
           {tab == "prog" && <WordPrograms />}
           {tab == "desc" && <WordDescription />}

@@ -22,6 +22,30 @@ export const LANGUAGE_MENU = [
   "Persian",
   "Spanish",
 ];
+
+export const COUNTRY_3CODES = [
+  '',
+  'arm',
+  'eng',
+  'wam',
+  'rus',
+  'oam',
+  'lat',
+  'tal',
+  'trk',
+  'ger',
+  'itl',
+  'fra',
+  'zaz',
+  'ham',
+  'asr',
+  'lez',
+  'chr',
+  'laz',
+  'prs',
+  'spn',
+];
+
 export const ROLE_MENU = [
   "ANY",
   "1",

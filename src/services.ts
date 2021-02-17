@@ -17,6 +17,10 @@ export async function postLogin(form: any) {
 /***
  * Knowledge Base
  */
-export async function postSearch(form: any) {
+export async function getSearch(form: any) {
   return request.post("/search_by_name", form).then((res) => res);
+}
+
+export async function getConcept(form: any) {
+  return request.post("/get_concept", form).then((res) => res);
 }

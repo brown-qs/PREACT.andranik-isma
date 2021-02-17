@@ -10,7 +10,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import ProgramSearch from "./ProgramSearch";
 import ConceptSearch from "./ConceptSearch";
-import SearchResultDialog from "./SearchResultDialog";
 import CardContent from "@material-ui/core/CardContent";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";

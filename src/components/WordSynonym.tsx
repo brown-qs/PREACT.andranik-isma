@@ -14,19 +14,35 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import Checkbox from "@material-ui/core/Checkbox";
+import { LANGUAGE_MENU, COUNTRY_3CODES } from "../constants";
 import Switch from "@material-ui/core/Switch";
+import MenuItem from "@material-ui/core/MenuItem";
+import connectStore from "../store/connect";
+import { currentWordData } from "../utils/redux-getters";
 
-interface WordSynonymProps {
-  word: string;
-}
-const WordSynonym: FunctionalComponent<WordSynonymProps> = (props) => {
+const WordSynonym: FunctionalComponent = (props) => {
   const theme = useTheme();
-
+  const [language, setLanguage] = useState(currentWordData(props).lang);
+  console.log(currentWordData(props));
   return (
     <Fragment>
       <Box p={2}>
         <MaterialTable
-          title="Synonyms"
+          title={
+            <FormControl fullWidth>
+              <InputLabel>Language</InputLabel>
+              <Select
+                value={language}
+                onChange={(e) => {
+                  setLanguage(e.target.value);
+                }}
+              >
+                {LANGUAGE_MENU.map((item, index) => {
+                  if (index) return <MenuItem value={index}>{item}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+          }
           localization={{
             header: {
               actions: "Up/Down",
@@ -70,22 +86,6 @@ const WordSynonym: FunctionalComponent<WordSynonymProps> = (props) => {
               },
             },
             {
-              icon: "add",
-              isFreeAction: true,
-              tooltip: "Add Synonym Program",
-              onClick: (event, rowData) => {
-                // Do save operation
-              },
-            },
-            {
-              icon: "add",
-              isFreeAction: true,
-              tooltip: "Add Language Program",
-              onClick: (event, rowData) => {
-                // Do save operation
-              },
-            },
-            {
               icon: "arrow_upward",
               tooltip: "Move up",
               onClick: (event, rowData) => {
@@ -99,27 +99,9 @@ const WordSynonym: FunctionalComponent<WordSynonymProps> = (props) => {
                 // Do save operation
               },
             },
-            {
-              icon: () => (
-                <FormControl fullWidth>
-                  <InputLabel>Language</InputLabel>
-                  <Select value={10} native>
-                    <option aria-label="None" value="" />
-                    <option value={10}>Ten</option>
-                    <option value={20}>Twenty</option>
-                    <option value={30}>Thirty</option>
-                  </Select>
-                </FormControl>
-              ),
-              isFreeAction: true,
-              tooltip: "Add Language Program",
-              onClick: (event, rowData) => {
-                // Do save operation
-              },
-            },
           ]}
           columns={[
-            { title: "syn", field: "syn_id", type: "numeric" },
+            { title: "syn", field: "syn", type: "numeric" },
             { title: "roots", field: "roots" },
             { title: "r1", field: "r1" },
             { title: "d1", field: "d1" },
@@ -132,22 +114,12 @@ const WordSynonym: FunctionalComponent<WordSynonymProps> = (props) => {
             {
               title: "mix",
               field: "mix",
-              render: (rowData) => <Switch color="primary" value={true} />,
+              render: (rowData) => (
+                <Switch color="primary" checked={rowData.mix == "1"} />
+              ),
             },
           ]}
-          data={new Array(10).fill({
-            syn_id: 1,
-            roots: "tree",
-            r1: 1,
-            d1: 1,
-            r2: 1,
-            d2: 1,
-            r3: 1,
-            d3: 1,
-            r4: 1,
-            d4: 1,
-            mix: 1,
-          })}
+          data={currentWordData(props).data[COUNTRY_3CODES[language] + "Words"] ?? []}
           options={{
             search: false,
             paging: false,
@@ -155,37 +127,11 @@ const WordSynonym: FunctionalComponent<WordSynonymProps> = (props) => {
             minBodyHeight: 500,
             maxBodyHeight: 500,
           }}
-        />
-        {/* <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <Button variant="contained" fullWidth mt={3}>
-              Add Synonym
-            </Button>
-            <Button variant="contained" fullWidth mt={3}>
-              Remove Synonym
-            </Button>
-          </Grid>
-          <Grid item xs={3}>
-            <Button variant="contained" fullWidth mt={3}>
-              Add Synonym Program
-            </Button>
-            <Button variant="contained" fullWidth mt={3}>
-              Add Language Program
-            </Button>
-          </Grid>
-          <Grid item xs={3} />
-          <Grid item xs={3}>
-            <Button variant="contained" fullWidth mt={3}>
-              Clear All Mix
-            </Button>
-            <Button variant="contained" fullWidth mt={3}>
-              Set All Mix
-            </Button>
-          </Grid>
-        </Grid> */}
+        />{" "}
+        {}
       </Box>
     </Fragment>
   );
 };
 
-export default WordSynonym;
+export default connectStore()(WordSynonym);
