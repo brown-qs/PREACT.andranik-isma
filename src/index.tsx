@@ -1,5 +1,6 @@
 import 'preact/debug'
 import { h, render } from 'preact'
+import 'regenerator-runtime/runtime'
 
 import App from './App'
 

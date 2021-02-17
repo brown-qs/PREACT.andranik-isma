@@ -48,9 +48,16 @@ const actions = (store) => ({
   /***
    * Knowledge Base
    */
-  doSearch: async (state, form: any) => {
+  searchConcept: async (state, form: any) => {
     store.setState({ loading: true });
     try {
+      if (form.baseRole == "ANY") form.baseRole = "";
+      if (form.frequency == "ANY") form.frequency = "";
+      if (form.rootNumber == "ANY") form.rootNumber = "";
+      if (form.synNumber == "ANY") form.synNumber = "";
+      if (form.classDist == "ANY") form.classDist = "";
+      if (form.role == "ANY") form.role = "";
+
       const results = await getSearch({ form });
       store.setState({ loading: false });
       actions(store).setSearchResults(state, results);

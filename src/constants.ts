@@ -63,9 +63,19 @@ export const ROLE_MENU = [
   "23",
 ];
 
+export const ROOT_NUMBER_MENU = ["ANY"].concat(
+  [...Array(10).keys()].map((i) => String(i + 1))
+);
+
+export const FREQUENCY_MENU = ["ANY", 1, 25, 75, 125, 175, 255];
+
 export const PROGRAM_TYPE_MENU = ["ANY", "Analys", "Syntheses", "Tree"];
 
 export const PROGRAM_STAGE_MENU = ["ANY", "0", "1", "2", "3", "5", "6", "7"];
+
+export const CLASS_DISTANCE_MENU = ["ANY"].concat(
+  [...Array(6).keys()].map((i) => String(i + 1))
+);
 
 export const PERMISSION_MENU = [
   "Armenian Words",

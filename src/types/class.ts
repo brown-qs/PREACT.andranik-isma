@@ -16,7 +16,7 @@ export class SearchingProperties {
   roleInv: Boolean;
   defNumber: String;
   defNumberInv: Boolean;
-  relations: Array<any>;
+  relations: Array<RelationSearch>;
   className: String;
   classNameInv: Boolean;
   classInClasses: Boolean;
@@ -32,13 +32,13 @@ export class SearchingProperties {
     this.searchAsSubtext = false;
     this.searchInRoots = false;
     this.language = 0;
-    this.baseRole = "";
+    this.baseRole = "ANY";
     this.baseRoleInv = false;
-    this.frequency = "";
+    this.frequency = "ANY";
     this.frequencyInv = false;
-    this.rootNumber = "";
+    this.rootNumber = "ANY";
     this.rootNumberInv = false;
-    this.synNumber = "";
+    this.synNumber = "ANY";
     this.synNumberInv = false;
     this.role = "ANY";
     this.roleInv = false;
@@ -48,7 +48,7 @@ export class SearchingProperties {
     this.className = "";
     this.classNameInv = false;
     this.classInClasses = true;
-    this.classDist = "";
+    this.classDist = "ANY";
     this.envName = "";
     this.envNameInv = false;
     this.envInEnvs = true;
