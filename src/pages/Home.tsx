@@ -34,6 +34,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import SearchIcon from "@material-ui/icons/Search";
 import { currentWordData } from "../utils/redux-getters";
+import Badge from "@material-ui/core/Badge";
 
 interface HomeProps {}
 
@@ -72,7 +73,9 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
               props.setCurrentWord(null);
             }}
           >
-            <SearchIcon style={{ fontSize: 40, fontWeight: 700 }} />
+            <Badge badgeContent={props.searchResults.length} color="secondary">
+              <SearchIcon style={{ fontSize: 40, fontWeight: 700 }} />
+            </Badge>
           </IconButton>
         </Grid>
       </Grid>

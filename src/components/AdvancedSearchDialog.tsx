@@ -17,6 +17,14 @@ import MaterialTable, { MTableToolbar } from "material-table";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { SearchingProperties, RelationSearch } from "../types/class";
+import AppBar from "@material-ui/core/AppBar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import Toolbar from "@material-ui/core/Toolbar";
+import CloseIcon from "@material-ui/icons/Close";
+import SearchIcon from "@material-ui/icons/Search";
+import BlockIcon from "@material-ui/icons/Block";
+import Tooltip from "@material-ui/core/Tooltip";
 
 interface AdvancedSearchDialogProps {
   open: boolean;
@@ -34,13 +42,37 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
 
   return (
     <Dialog
-      fullWidth
-      maxWidth="md"
+      fullScreen
       open={props.open}
       onClose={props.onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
+      <AppBar position="static" style={{ flexGrow: 1 }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={props.onClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h6" style={{ flexGrow: 1 }}>
+            Advanced Search
+          </Typography>
+          <Tooltip title="Clear Inputs">
+            <IconButton color="inherit" onClick={props.onClose}>
+              <BlockIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Search">
+            <IconButton color="inherit" onClick={props.onClose}>
+              <SearchIcon />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+      </AppBar>
       <DialogTitle id="alert-dialog-title">{"Advanced Search"}</DialogTitle>
       <DialogContent>
         <Grid container spacing={3}>
@@ -302,15 +334,14 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
               control={<Checkbox color="primary" name="checkedA" />}
               label="Inv"
             />
-          </Grid>          
+          </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
               <InputLabel>Env Name</InputLabel>
               <Input value={text} />
             </FormControl>
           </Grid>
-          <Grid item xs={2}>
-          </Grid>
+          <Grid item xs={2}></Grid>
           <Grid item xs={4}>
             <RadioGroup
               row
@@ -340,10 +371,20 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose} variant="contained" color="default" size="large">
+        <Button
+          onClick={props.onClose}
+          variant="contained"
+          color="default"
+          size="large"
+        >
           Clear
         </Button>
-        <Button onClick={props.onClose} variant="contained" color="primary" size="large">
+        <Button
+          onClick={props.onClose}
+          variant="contained"
+          color="primary"
+          size="large"
+        >
           Search
         </Button>
       </DialogActions>
