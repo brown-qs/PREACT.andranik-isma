@@ -17,8 +17,10 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
-import { PersonalVideo } from "@material-ui/icons";
-import logo from '../../public/images/logo.jpg'
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import logo from "../../public/images/logo.jpg";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 function Copyright() {
   return (
@@ -74,12 +76,14 @@ const SignIn = (props) => {
   const [form, setForm] = useState({
     userName: "",
     password: "",
-    defLang: "0",
+    defLang: "1",
   });
+  const [tried, setTried] = useState(false);
 
   const onLogin = async (event: Event) => {
     event.preventDefault();
-    props.login(form);
+    setTried(true);
+    if (form.userName != "" && form.password != "") props.login(form);
   };
 
   // route to home page after user logged
@@ -109,13 +113,20 @@ const SignIn = (props) => {
               name="username"
               autoComplete="username"
               autoFocus
-              error={props.errors != ''}
+              error={props.errors != "" || form.userName == ""}
               value={form.userName}
               onChange={(e) => {
                 setForm((prev) => ({
                   ...prev,
                   userName: e.currentTarget.value,
                 }));
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircleIcon />
+                  </InputAdornment>
+                ),
               }}
             />
             <TextField
@@ -129,13 +140,20 @@ const SignIn = (props) => {
               id="password"
               autoComplete="current-password"
               helperText={props.errors}
-              error={props.errors != ''}
+              error={props.errors != "" || form.password == ""}
               value={form.password}
               onChange={(e) => {
                 setForm((prev) => ({
                   ...prev,
                   password: e.currentTarget.value,
                 }));
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <VpnKeyIcon />
+                  </InputAdornment>
+                ),
               }}
             />
             <RadioGroup
@@ -193,6 +211,6 @@ const SignIn = (props) => {
       </Grid>
     </Grid>
   );
-}
+};
 
 export default connectStore()(SignIn);

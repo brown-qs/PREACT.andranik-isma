@@ -5,6 +5,7 @@ import {
   getConcept,
   getUserTask,
   getUserInfo,
+  searchProgComment,
 } from "../services";
 
 const actions = (store) => ({
@@ -51,6 +52,16 @@ const actions = (store) => ({
     store.setState({ loading: true });
     try {
       const results = await getSearch({ form });
+      store.setState({ loading: false });
+      actions(store).setSearchResults(state, results);
+    } catch (e) {
+      store.setState({ loading: false });
+    }
+  },
+  searchProgComment: async (state, form: any) => {
+    store.setState({ loading: true });
+    try {
+      const results = await searchProgComment({ ...form });
       store.setState({ loading: false });
       actions(store).setSearchResults(state, results);
     } catch (e) {

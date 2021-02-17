@@ -21,6 +21,10 @@ export async function getSearch(form: any) {
   return request.post("/search_by_name", form).then((res) => res);
 }
 
+export async function searchProgComment(form: any) {
+  return request.post("/search_prog_comment", form).then((res) => res);
+}
+
 export async function getConcept(form: any) {
   return request.post("/get_concept", form).then((res) => res);
 }
@@ -28,7 +32,6 @@ export async function getConcept(form: any) {
 /***
  * Tasks
  */
-
 
 export async function getUserTask(form: any) {
   return request.post("/get_user_task", form).then((res) => res);

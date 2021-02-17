@@ -63,6 +63,10 @@ export const ROLE_MENU = [
   "23",
 ];
 
+export const PROGRAM_TYPE_MENU = ["ANY", "Analys", "Syntheses", "Tree"];
+
+export const PROGRAM_STAGE_MENU = ["ANY", "0", "1", "2", "3", "5", "6", "7"];
+
 export const PERMISSION_MENU = [
   "Armenian Words",
   "English Words",

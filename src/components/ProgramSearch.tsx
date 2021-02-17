@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from "preact";
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import useAllTags from "../hooks/useAllTags";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
@@ -9,64 +9,100 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
+import connectStore from "../store/connect";
 import { FormControl } from "./StyledMui";
+import {
+  LANGUAGE_MENU,
+  PROGRAM_TYPE_MENU,
+  PROGRAM_STAGE_MENU,
+} from "../constants";
 
-const ProgramSearch: FunctionalComponent = () => {
-  const { tags } = useAllTags();
-  const [open, setOpen] = useState(false);
-  const [search_mode, setSearchMode] = useState("concept");
-  const [text, setText] = useState("");
+const ProgramSearch: FunctionalComponent = (props) => {
+  const [progSearchForm, setProgSearchForm] = useState({
+    word: "",
+    language: 0,
+    type: 0,
+    stage: 0,
+    text: "",
+    commText: "",
+  });
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  useEffect(() => {
+    if (props.searchClick) {
+      props.searchProgComment(progSearchForm);
+    }
+  }, [props.searchClick]);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <Fragment>
       <FormControl fullWidth size="small">
         <InputLabel>Word</InputLabel>
-        <Input value={text} />
+        <Input
+          value={progSearchForm.word}
+          onChange={(e) => {
+            setProgSearchForm({ ...progSearchForm, word: e.target.value });
+          }}
+        />
       </FormControl>
       <FormControl fullWidth mt={3}>
         <InputLabel>Language</InputLabel>
-        <Select value={10} native>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+        <Select
+          value={progSearchForm.language}
+          onChange={(e) => {
+            setProgSearchForm({ ...progSearchForm, language: e.target.value });
+          }}
+        >
+          {LANGUAGE_MENU.map((item, index) => (
+            <MenuItem value={index}>{item}</MenuItem>
+          ))}
         </Select>
       </FormControl>
       <FormControl fullWidth mt={3}>
         <InputLabel>Program Type</InputLabel>
-        <Select value={10} native>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+        <Select
+          value={progSearchForm.type}
+          onChange={(e) => {
+            setProgSearchForm({ ...progSearchForm, type: e.target.value });
+          }}
+        >
+          {PROGRAM_TYPE_MENU.map((item, index) => (
+            <MenuItem value={index}>{item}</MenuItem>
+          ))}
         </Select>
       </FormControl>
       <FormControl fullWidth mt={3}>
         <InputLabel>Program Stage</InputLabel>
-        <Select value={10} native>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+        <Select
+          value={progSearchForm.stage}
+          onChange={(e) => {
+            setProgSearchForm({ ...progSearchForm, stage: e.target.value });
+          }}
+        >
+          {PROGRAM_STAGE_MENU.map((item, index) => (
+            <MenuItem value={index}>{item}</MenuItem>
+          ))}
         </Select>
-      </FormControl>  
+      </FormControl>
       <FormControl fullWidth size="small" mt={3}>
         <InputLabel>Search Text in Program Body</InputLabel>
-        <Input value={text} />
+        <Input
+          value={progSearchForm.text}
+          onChange={(e) => {
+            setProgSearchForm({ ...progSearchForm, text: e.target.value });
+          }}
+        />
       </FormControl>
       <FormControl fullWidth size="small" mt={3}>
         <InputLabel>Search Text in Comment Body</InputLabel>
-        <Input value={text} />
+        <Input
+          value={progSearchForm.commText}
+          onChange={(e) => {
+            setProgSearchForm({ ...progSearchForm, commText: e.target.value });
+          }}
+        />
       </FormControl>
     </Fragment>
   );
 };
 
-export default ProgramSearch;
+export default connectStore()(ProgramSearch);

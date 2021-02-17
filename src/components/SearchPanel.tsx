@@ -71,6 +71,7 @@ const SearchPanel: FunctionalComponent = (props) => {
                     id="demo-simple-select"
                     value={search_mode}
                     onChange={(e) => {
+                      setSearchClick(0);
                       setSearchMode(e.target.value);
                     }}
                   >
