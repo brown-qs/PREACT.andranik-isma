@@ -41,7 +41,8 @@
     "preact": "^10.1.0",
     "preact-router": "^3.1.0",
     "react-beautiful-dnd": "^13.0.0",
-    "redux-zero": "^5.1.7"
+    "redux-zero": "^5.1.7",
+    "src": "^1.1.2"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.3",

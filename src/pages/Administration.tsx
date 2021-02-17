@@ -40,19 +40,24 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Switch from "@material-ui/core/Switch";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { PERMISSION_MENU } from "../constants";
 
 interface AdministrationProps {}
 
 const Administration: FunctionalComponent<AdministrationProps> = (props) => {
   const { user } = props;
-  const [tab, setTab] = useState("inbox");
   const theme = useTheme();
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedUser, setSelectedUser] = useState({} as any);
 
   useEffect(() => {
     if (!user) route("/login");
   }, [user]);
 
+  useEffect(() => {
+    !props.hasUsersLoaded && props.loadUsers();
+  }, []);
+
+  console.log(props.users);
   return (
     <Fragment>
       <Container maxWidth="lg">
@@ -62,18 +67,19 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
               columns={[
                 {
                   title: "User name",
-                  field: "username",
+                  field: "userName",
                   headerStyle: {
                     backgroundColor: theme.palette.primary.main,
                   },
                 },
               ]}
-              data={new Array(10).fill("").map((val, idx) => {
-                return { id: idx, username: "shin" };
-              })}
-              onRowClick={(evt, selectedRow) =>
-                setSelectedRow(selectedRow.tableData.id)
-              }
+              data={props.users}
+              onRowClick={(evt, selectedRow) => {
+                setSelectedUser({
+                  ...selectedRow,
+                  rePassword: selectedRow.password,
+                });
+              }}
               options={{
                 showTitle: false,
                 search: false,
@@ -84,7 +90,7 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
                 maxBodyHeight: 500,
                 rowStyle: (rowData) => ({
                   backgroundColor:
-                    selectedRow === rowData.tableData.id ? "#EEE" : "#FFF",
+                    selectedUser.id === rowData.id ? "#EEE" : "#FFF",
                 }),
               }}
             />
@@ -120,16 +126,96 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
               <CardContent>
                 <Grid container spacing={6}>
                   <Grid item xs={4}>
-                    <TextField mt={2} label="User Name:" fullWidth />
-                    <TextField mt={2} label="Password:" fullWidth />
-                    <TextField mt={2} label="Re. Password:" fullWidth />
-                    <TextField mt={2} label="First Name:" fullWidth />
-                    <TextField mt={2} label="Last Name:" fullWidth />
-                    <TextField mt={2} label="Middle Name:" fullWidth />
-                    <TextField mt={2} label="E-Mail:" fullWidth />
-                    <TextField mt={2} label="Phone:" fullWidth />
-                    <TextField mt={2} label="Cell Phone:" fullWidth />
-                    <TextField mt={2} label="Address:" fullWidth />
+                    <TextField
+                      mt={2}
+                      label="User Name:"
+                      fullWidth
+                      value={selectedUser.userName ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ userName: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="Password:"
+                      fullWidth
+                      value={selectedUser.password ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ password: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="Re. Password:"
+                      fullWidth
+                      value={selectedUser.rePassword ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ rePassword: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="First Name:"
+                      fullWidth
+                      value={selectedUser.fName ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ fName: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="Last Name:"
+                      fullWidth
+                      value={selectedUser.lName ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ lName: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="Middle Name:"
+                      fullWidth
+                      value={selectedUser.mName ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ mName: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="E-Mail:"
+                      fullWidth
+                      value={selectedUser.email ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ email: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="Phone:"
+                      fullWidth
+                      value={selectedUser.phone ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ phone: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="Cell Phone:"
+                      fullWidth
+                      value={selectedUser.cPhone ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ cPhone: e.target.value });
+                      }}
+                    />
+                    <TextField
+                      mt={2}
+                      label="Address:"
+                      fullWidth
+                      value={selectedUser.address ?? ''}
+                      onChange={(e) => {
+                        setSelectedUser({ address: e.target.value });
+                      }}
+                    />
                   </Grid>
                   <Grid item xs={8}>
                     <MaterialTable
@@ -151,17 +237,14 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
                           ),
                         },
                       ]}
-                      data={new Array(10).fill({
-                        name: "Armenian Words",
-                        perm: true,
-                        r_w: true,
+                      data={PERMISSION_MENU.map((per) => {
+                        return {
+                          name: per,
+                        };
                       })}
                       options={{
-                        search: false,
                         paging: false,
                         actionsColumnIndex: -1,
-                        minBodyHeight: 500,
-                        maxBodyHeight: 500,
                       }}
                     />
                   </Grid>

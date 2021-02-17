@@ -18,6 +18,19 @@ const appStore = (createStore as any)({
   searchResults: [],
   words: [],
   currentWord: null,
+
+  /***
+   * Tasks
+   */
+  hasTaskLoaded: false,
+  inbox: [],
+  outbox: [],
+
+  /***
+   * Administration
+   */
+  hasUsersLoaded: false,
+  users: [],
 });
 
 export default appStore;

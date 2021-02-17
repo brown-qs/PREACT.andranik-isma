@@ -23,7 +23,6 @@ import { currentWordData } from "../utils/redux-getters";
 const WordSynonym: FunctionalComponent = (props) => {
   const theme = useTheme();
   const [language, setLanguage] = useState(currentWordData(props).lang);
-  console.log(currentWordData(props));
   return (
     <Fragment>
       <Box p={2}>
@@ -59,13 +58,13 @@ const WordSynonym: FunctionalComponent = (props) => {
               },
             },
             {
-              icon: "remove",
-              isFreeAction: true,
+              icon: "delete",
               iconProps: { style: { color: theme.palette.secondary.main } },
               tooltip: "Remove Synonym",
               onClick: (event, rowData) => {
                 // Do save operation
               },
+              position: 'toolbarOnSelect'
             },
             {
               icon: "done_all",
@@ -91,6 +90,7 @@ const WordSynonym: FunctionalComponent = (props) => {
               onClick: (event, rowData) => {
                 // Do save operation
               },
+              position: 'row'
             },
             {
               icon: "arrow_downward",
@@ -98,6 +98,7 @@ const WordSynonym: FunctionalComponent = (props) => {
               onClick: (event, rowData) => {
                 // Do save operation
               },
+              position: 'row'
             },
           ]}
           columns={[
@@ -121,14 +122,13 @@ const WordSynonym: FunctionalComponent = (props) => {
           ]}
           data={currentWordData(props).data[COUNTRY_3CODES[language] + "Words"] ?? []}
           options={{
-            search: false,
             paging: false,
             actionsColumnIndex: -1,
             minBodyHeight: 500,
             maxBodyHeight: 500,
+            selection: true,
           }}
-        />{" "}
-        {}
+        />
       </Box>
     </Fragment>
   );

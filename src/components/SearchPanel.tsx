@@ -17,6 +17,7 @@ import { Grid } from "./StyledMui";
 import MaterialTable from "material-table";
 import { useTheme } from "@material-ui/core/styles";
 import connectStore from "../store/connect";
+import { LANGUAGE_MENU } from "../constants";
 
 const SearchPanel: FunctionalComponent = (props) => {
   const [search_mode, setSearchMode] = useState("concept");
@@ -40,7 +41,11 @@ const SearchPanel: FunctionalComponent = (props) => {
               },
             ]}
             columns={[
-              { title: "Language", field: "lang" },
+              {
+                title: "Language",
+                field: "lang",
+                render: (rowData) => LANGUAGE_MENU[rowData.lang],
+              },
               { title: "Syn", field: "syn", type: "numeric" },
               { title: "Word", field: "word" },
               {
@@ -50,7 +55,6 @@ const SearchPanel: FunctionalComponent = (props) => {
             ]}
             data={props.searchResults}
             options={{
-              search: false,
               paging: false,
               actionsColumnIndex: -1,
             }}

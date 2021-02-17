@@ -15,6 +15,8 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import Checkbox from "@material-ui/core/Checkbox";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
+import { currentWordData } from "../utils/redux-getters";
+import connectStore from "../store/connect";
 
 interface WordDesciptionProps {}
 const WordDesciption: FunctionalComponent<WordDesciptionProps> = (props) => {
@@ -30,10 +32,11 @@ const WordDesciption: FunctionalComponent<WordDesciptionProps> = (props) => {
           rows={20}
           label="Description goes here..."
           variant="filled"
+          value={currentWordData(props).data.desc ?? ""}
         />
       </Box>
     </Fragment>
   );
 };
 
-export default WordDesciption;
+export default connectStore()(WordDesciption);

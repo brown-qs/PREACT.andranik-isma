@@ -24,3 +24,16 @@ export async function getSearch(form: any) {
 export async function getConcept(form: any) {
   return request.post("/get_concept", form).then((res) => res);
 }
+
+/***
+ * Tasks
+ */
+
+
+export async function getUserTask(form: any) {
+  return request.post("/get_user_task", form).then((res) => res);
+}
+
+export async function getUserInfo(form: any) {
+  return request.post("/get_user_info", form).then((res) => res);
+}

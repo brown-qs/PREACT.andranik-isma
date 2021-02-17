@@ -15,6 +15,8 @@ import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import Checkbox from "@material-ui/core/Checkbox";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { currentWordData } from "../utils/redux-getters";
+import connectStore from "../store/connect";
 
 interface WordSemanticProps {}
 const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
@@ -45,68 +47,71 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
           </Button>
         </ButtonGroup>
         {section == 0 && (
-          <Grid container spacing={1}>
-            <Grid item xs={10}>
-              <MaterialTable
-                actions={[
-                  {
-                    icon: "read_more",
-                    iconProps: { style: { color: theme.palette.primary.main } },
-                    tooltip: "Show More",
-                    onClick: (event, rowData) => {
-                      // Do save operation
-                    },
-                  },
-                ]}
-                columns={[
-                  { title: "Num", field: "num", type: "numeric" },
-                  { title: "Code1", field: "code1" },
-                  { title: "Code2", field: "code2" },
-                  { title: "Concept Name", field: "concept" },
-                  { title: "Prob", field: "prob" },
-                ]}
-                data={new Array(10).fill({
-                  num: 1,
-                  code1: 168,
-                  code2: 5,
-                  concept: "area(types)",
-                  prob: 100,
-                })}
-                options={{
-                  showTitle: false,
-                  search: false,
-                  paging: false,
-                  actionsColumnIndex: -1,
-                  toolbar: false,
-                  minBodyHeight: 500,
-                  maxBodyHeight: 500,
-                }}
-              />
-              <Grid container spacing={2}>
-                <Grid item xs={3}>
-                  <Button variant="contained" fullWidth mt={3}>
-                    Add Relation
-                  </Button>
-                  <Button variant="contained" fullWidth mt={3}>
-                    Remove Relation
-                  </Button>
-                </Grid>
-                <Grid item xs={3}>
-                  <Button variant="contained" fullWidth mt={3}>
-                    Show Rel Concept
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={2}>
-              <Button variant="contained" fullWidth mt={5}>
-                <ArrowUpwardIcon /> Up
-              </Button>
-              <Button variant="contained" fullWidth mt={1}>
-                <ArrowDownwardIcon /> Down
-              </Button>
-            </Grid>
-          </Grid>
+          <MaterialTable
+            title="Relations"
+            actions={[
+              {
+                icon: "add",
+                isFreeAction: true,
+                iconProps: { style: { color: theme.palette.primary.main } },
+                tooltip: "Add Relation",
+                onClick: (event, rowData) => {
+                  // Do save operation
+                },
+              },
+              {
+                icon: "delete",
+                iconProps: {
+                  style: { color: theme.palette.secondary.main },
+                },
+                tooltip: "Remove Relation",
+                onClick: (event, rowData) => {
+                  // Do save operation
+                },
+                position: 'toolbarOnSelect',
+              },
+              {
+                icon: "arrow_upward",
+                tooltip: "Move up",
+                onClick: (event, rowData) => {
+                  // Do save operation
+                },
+                position: 'row',
+              },
+              {
+                icon: "arrow_downward",
+                tooltip: "Move Down",
+                onClick: (event, rowData) => {
+                  // Do save operation
+                },
+                position: 'row',
+              },
+              {
+                icon: "read_more",
+                iconProps: { style: { color: theme.palette.primary.main } },
+                tooltip: "Show More",
+                onClick: (event, rowData) => {
+                  // Do save operation
+                },
+                position: 'row',
+              },
+            ]}
+            columns={[
+              { title: "Num", field: "rel_num", type: "numeric" },
+              { title: "Code1", field: "code1" },
+              { title: "Code2", field: "code2" },
+              { title: "Concept Name", field: "conceptName" },
+              { title: "Prob", field: "prob" },
+            ]}
+            data={currentWordData(props).data.relations ?? []}
+            options={{
+              paging: false,
+              selection: true,
+              actionsColumnIndex: -1,
+              minBodyHeight: 500,
+              maxBodyHeight: 500,
+            }}
+          />
         )}
         {section == 1 && (
           <Grid container spacing={1}>
@@ -124,15 +129,11 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
                   },
                 ]}
                 columns={[
-                  { title: "Concept Name", field: "concept", type: "numeric" },
+                  { title: "Concept Name", field: "conceptName" },
                   { title: "Prob", field: "prob" },
                 ]}
-                data={new Array(10).fill({
-                  concept: "area(types)",
-                  prob: 100,
-                })}
+                data={currentWordData(props).data.classes ?? []}
                 options={{
-                  search: false,
                   paging: false,
                   actionsColumnIndex: -1,
                   minBodyHeight: 500,
@@ -154,15 +155,11 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
                   },
                 ]}
                 columns={[
-                  { title: "Concept Name", field: "concept", type: "numeric" },
+                  { title: "Concept Name", field: "conceptName" },
                   { title: "Prob", field: "prob" },
                 ]}
-                data={new Array(10).fill({
-                  concept: "area(types)",
-                  prob: 100,
-                })}
+                data={currentWordData(props).data.environments ?? []}
                 options={{
-                  search: false,
                   paging: false,
                   actionsColumnIndex: -1,
                   minBodyHeight: 500,
@@ -191,4 +188,4 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
   );
 };
 
-export default WordSemantic;
+export default connectStore()(WordSemantic);

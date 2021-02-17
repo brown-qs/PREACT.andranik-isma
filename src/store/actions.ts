@@ -1,6 +1,11 @@
 import { request } from "../services";
-import { postLogin, getSearch, getConcept } from "../services";
-import { DEF_LANG } from "../constants";
+import {
+  postLogin,
+  getSearch,
+  getConcept,
+  getUserTask,
+  getUserInfo,
+} from "../services";
 
 const actions = (store) => ({
   /***
@@ -77,13 +82,47 @@ const actions = (store) => ({
     }
   },
   removeWord: (state, wordId) => {
-    if (wordId == state.currentWord.id) store.setState({ currentWord: {} });
+    if (wordId == state.currentWord) store.setState({ currentWord: null });
     store.setState({
       words: [...state.words].filter((val) => val.id != wordId),
     });
   },
   setCurrentWord: (state, wordId) => {
     store.setState({ currentWord: wordId });
+  },
+
+  /***
+   * Tasks
+   */
+  loadTasks: async (state) => {
+    store.setState({ loading: true });
+    try {
+      const inbox = await getUserTask({
+        userId: state.user.id,
+        inbox: true,
+      });
+      store.setState({ inbox });
+      const outbox = await getUserTask({
+        userId: state.user.id,
+        inbox: false,
+      });
+      store.setState({ outbox });
+      store.setState({ hasTaskLoaded: true });
+      store.setState({ loading: false });
+    } catch {
+      store.setState({ loading: false });
+    }
+  },
+  loadUsers: async (state) => {
+    store.setState({ loading: true });
+    try {
+      const users = await getUserInfo({ userId: 0 });
+      store.setState({ users });
+      store.setState({ hasUsersLoaded: true });
+      store.setState({ loading: false });
+    } catch {
+      store.setState({ loading: false });
+    }
   },
 });
 
