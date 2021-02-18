@@ -1,4 +1,4 @@
-export class SearchingProperties {
+export class ConceptSearchProperties {
   id: String;
   text: String;
   searchAsSubtext: Boolean;
@@ -16,7 +16,7 @@ export class SearchingProperties {
   roleInv: Boolean;
   defNumber: String;
   defNumberInv: Boolean;
-  relations: Array<RelationSearch>;
+  relations: Array<RelationSearchProperties>;
   className: String;
   classNameInv: Boolean;
   classInClasses: Boolean;
@@ -55,8 +55,7 @@ export class SearchingProperties {
     this.envDist = "";
   }
 }
-
-export class RelationSearch {
+export class RelationSearchProperties {
   code1: String;
   code2: String;
   conceptName: String;
@@ -70,5 +69,22 @@ export class RelationSearch {
     this.prob = "";
     this.inv = 0;
     this.andor = 1;
+  }
+}
+
+export class ProgramSearchProperties {
+  word: String;
+  language: Number;
+  type: Number;
+  stage: Number;
+  text: String;
+  commText: String;
+  constructor() {
+    this.word = "";
+    this.language = 0;
+    this.type = 0;
+    this.stage = 0;
+    this.text = "";
+    this.commText = "";
   }
 }

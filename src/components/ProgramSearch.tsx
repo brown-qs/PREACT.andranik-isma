@@ -16,22 +16,24 @@ import {
   PROGRAM_TYPE_MENU,
   PROGRAM_STAGE_MENU,
 } from "../constants";
+import { ProgramSearchProperties } from "../types/SearchProperty";
 
 const ProgramSearch: FunctionalComponent = (props) => {
-  const [progSearchForm, setProgSearchForm] = useState({
-    word: "",
-    language: 0,
-    type: 0,
-    stage: 0,
-    text: "",
-    commText: "",
-  });
+  const [progSearchForm, setProgSearchForm] = useState(
+    new ProgramSearchProperties()
+  );
 
   useEffect(() => {
     if (props.searchClick) {
       props.searchProgComment(progSearchForm);
     }
   }, [props.searchClick]);
+
+  useEffect(() => {
+    if (props.clearClick) {
+      setProgSearchForm(new ProgramSearchProperties());
+    }
+  }, [props.clearClick]);
 
   return (
     <Fragment>

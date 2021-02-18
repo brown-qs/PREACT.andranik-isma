@@ -18,7 +18,7 @@ import Radio from "@material-ui/core/Radio";
 import CheckIcon from "@material-ui/icons/Check";
 import RemoveIcon from "@material-ui/icons/Remove";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import { SearchingProperties, RelationSearch } from "../types/class";
+import { ConceptSearchProperties } from "../types/SearchProperty";
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
@@ -48,8 +48,8 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
 ) => {
   const theme = useTheme();
   const [text, setText] = useState("");
-  const [searchForm, setSearchForm] = useState<SearchingProperties>(
-    new SearchingProperties()
+  const [searchForm, setSearchForm] = useState<ConceptSearchProperties>(
+    new ConceptSearchProperties()
   );
 
   return (

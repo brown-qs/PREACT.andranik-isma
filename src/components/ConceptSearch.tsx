@@ -17,13 +17,14 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import connectStore from "../store/connect";
 import { LANGUAGE_MENU, ROLE_MENU } from "../constants";
-import { SearchingProperties, RelationSearch } from "../types/class";
+import {
+  ConceptSearchProperties,
+  RelationSearchProperties,
+} from "../types/SearchProperty";
 
 const ConceptSearch: FunctionalComponent = (props) => {
   const [open, setOpen] = useState(false);
-  const [searchForm, setSearchForm] = useState<SearchingProperties>(
-    new SearchingProperties()
-  );
+  const [searchForm, setSearchForm] = useState(new ConceptSearchProperties());
 
   const handleOpen = () => {
     setOpen(true);
@@ -38,6 +39,12 @@ const ConceptSearch: FunctionalComponent = (props) => {
       props.searchConcept(searchForm);
     }
   }, [props.searchClick]);
+
+  useEffect(() => {
+    if (props.clearClick) {
+      setSearchForm(new ConceptSearchProperties());
+    }
+  }, [props.clearClick]);
 
   return (
     <Fragment>
@@ -75,11 +82,11 @@ const ConceptSearch: FunctionalComponent = (props) => {
               <Checkbox
                 color="primary"
                 name="checkedA"
-                value={searchForm.searchAsSubtext}
+                checked={searchForm.searchAsSubtext}
                 onChange={(e) => {
                   setSearchForm({
                     ...searchForm,
-                    searchAsSubtext: e.target.value,
+                    searchAsSubtext: e.target.checked,
                   });
                 }}
               />
@@ -90,12 +97,20 @@ const ConceptSearch: FunctionalComponent = (props) => {
         <Grid item xs={6}>
           <FormControlLabel
             fullWidth
-            control={<Checkbox color="primary" name="checkedA" />}
+            control={
+              <Checkbox
+                color="primary"
+                name="checkedA"
+                checked={searchForm.searchInRoots}
+                onChange={(e) => {
+                  setSearchForm({
+                    ...searchForm,
+                    searchInRoots: e.target.checked,
+                  });
+                }}
+              />
+            }
             label="Search in Roots"
-            value={searchForm.searchInRoots}
-            onChange={(e) => {
-              setSearchForm({ ...searchForm, searchInRoots: e.target.value });
-            }}
           />
         </Grid>
         <Grid item xs={4}>
@@ -140,7 +155,7 @@ const ConceptSearch: FunctionalComponent = (props) => {
             <InputLabel>Concept Name of Horizontal Relation</InputLabel>
             <Input
               onChange={(e) => {
-                let rel: RelationSearch = new RelationSearch();
+                let rel: RelationSearchProperties = new RelationSearchProperties();
                 rel.conceptName = e.target.value;
                 setSearchForm({ ...searchForm, relations: [rel] });
               }}
@@ -163,6 +178,7 @@ const ConceptSearch: FunctionalComponent = (props) => {
             row
             aria-label="position"
             name="position"
+            defaultValue="classes"
             onChange={(e) => {
               setSearchForm({
                 ...searchForm,

@@ -22,6 +22,7 @@ import { LANGUAGE_MENU } from "../constants";
 const SearchPanel: FunctionalComponent = (props) => {
   const [search_mode, setSearchMode] = useState("concept");
   const [searchClick, setSearchClick] = useState(0);
+  const [clearClick, setClearClick] = useState(0);
   const theme = useTheme();
 
   return (
@@ -72,6 +73,7 @@ const SearchPanel: FunctionalComponent = (props) => {
                     value={search_mode}
                     onChange={(e) => {
                       setSearchClick(0);
+                      setClearClick(0);
                       setSearchMode(e.target.value);
                     }}
                   >
@@ -85,10 +87,16 @@ const SearchPanel: FunctionalComponent = (props) => {
             />
             <CardContent>
               {search_mode == "concept" && (
-                <ConceptSearch searchClick={searchClick} />
+                <ConceptSearch
+                  searchClick={searchClick}
+                  clearClick={clearClick}
+                />
               )}
               {search_mode == "program" && (
-                <ProgramSearch searchClick={searchClick} />
+                <ProgramSearch
+                  searchClick={searchClick}
+                  clearClick={clearClick}
+                />
               )}
               <Box mt={3} mb={1}>
                 <Button
@@ -97,6 +105,7 @@ const SearchPanel: FunctionalComponent = (props) => {
                   color="primary"
                   fullWidth
                   size="large"
+                  onClick={() => setClearClick((cur) => cur + 1)}
                 >
                   Clear Inputs
                 </Button>
