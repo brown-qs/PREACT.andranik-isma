@@ -31,8 +31,8 @@ const WordDefinition: FunctionalComponent<WordDefinitionProps> = (props) => {
           container
           justify="space-between"
           alignItems="flex-end"
-          pl={10}
-          pr={10}
+          pl={3}
+          pr={3}
           mt={2}
           mb={2}
         >

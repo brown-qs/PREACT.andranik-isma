@@ -41,13 +41,16 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Switch from "@material-ui/core/Switch";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { PERMISSION_MENU } from "../constants";
+import { User } from "../types/User";
 
 interface AdministrationProps {}
 
 const Administration: FunctionalComponent<AdministrationProps> = (props) => {
   const { user } = props;
   const theme = useTheme();
-  const [selectedUser, setSelectedUser] = useState({} as any);
+  const [selectedUser, setSelectedUser] = useState(new User());
+  const [changed, setChanged] = useState(false);
+  const [select, setSelect] = useState(false);
 
   useEffect(() => {
     if (!user) route("/login");
@@ -57,7 +60,11 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
     !props.hasUsersLoaded && props.loadUsers();
   }, []);
 
-  console.log(props.users);
+  useEffect(() => {
+    setChanged(!select);
+    setSelect(false);
+  }, [selectedUser]);
+
   return (
     <Fragment>
       <Container maxWidth="lg">
@@ -75,7 +82,9 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
               ]}
               data={props.users}
               onRowClick={(evt, selectedRow) => {
+                setSelect(true);
                 setSelectedUser({
+                  ...selectedUser,
                   ...selectedRow,
                   rePassword: selectedRow.password,
                 });
@@ -94,33 +103,51 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
                 }),
               }}
             />
-            <Grid mt={3} container justify="space-between">
-              <Grid item>
-                <Button variant="outlined">Remove User</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined">Load Users</Button>
-              </Grid>
-            </Grid>
-            <Grid mt={1} container justify="space-between">
-              <Grid item>
-                <Button variant="outlined">Add User</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined">Show Users {">>"}</Button>
-              </Grid>
-            </Grid>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              mt={3}
+              onClick={(e) => {
+                setSelectedUser(new User());
+              }}
+            >
+              Add User
+            </Button>
           </Grid>
           <Grid item xs={9}>
             <Card elevation={10}>
               <CardHeader
                 title="User Information"
                 action={
-                  <Tooltip title="Save User">
-                    <IconButton aria-label="settings" color="primary">
-                      <SaveIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <Fragment>
+                    <Tooltip title="Save User">
+                      <IconButton
+                        aria-label="settings"
+                        color="primary"
+                        disabled={!changed}
+                        onClick={(e) => {
+                          props.saveUserInfo(selectedUser);
+                          setSelectedUser(new User());
+                        }}
+                      >
+                        <SaveIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Remove User">
+                      <IconButton
+                        disabled={selectedUser.id == 0}
+                        aria-label="remove"
+                        color="secondary"
+                        onClick={(e) => {
+                          props.deleteUser(selectedUser.id);
+                          setSelectedUser(new User());
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Fragment>
                 }
               />
               <CardContent>
@@ -130,90 +157,122 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
                       mt={2}
                       label="User Name:"
                       fullWidth
-                      value={selectedUser.userName ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ userName: e.target.value });
+                      defaultValue={selectedUser.userName ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          userName: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="Password:"
                       fullWidth
-                      value={selectedUser.password ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ password: e.target.value });
+                      type="password"
+                      value={selectedUser.password ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          password: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="Re. Password:"
                       fullWidth
-                      value={selectedUser.rePassword ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ rePassword: e.target.value });
+                      type="password"
+                      value={selectedUser.rePassword ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          rePassword: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="First Name:"
                       fullWidth
-                      value={selectedUser.fName ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ fName: e.target.value });
+                      value={selectedUser.fName ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          fName: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="Last Name:"
                       fullWidth
-                      value={selectedUser.lName ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ lName: e.target.value });
+                      value={selectedUser.lName ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          lName: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="Middle Name:"
                       fullWidth
-                      value={selectedUser.mName ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ mName: e.target.value });
+                      value={selectedUser.mName ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          mName: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="E-Mail:"
                       fullWidth
-                      value={selectedUser.email ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ email: e.target.value });
+                      value={selectedUser.email ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          email: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="Phone:"
                       fullWidth
-                      value={selectedUser.phone ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ phone: e.target.value });
+                      value={selectedUser.phone ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          phone: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="Cell Phone:"
                       fullWidth
-                      value={selectedUser.cPhone ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ cPhone: e.target.value });
+                      value={selectedUser.cPhone ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          cPhone: e.target.value,
+                        });
                       }}
                     />
                     <TextField
                       mt={2}
                       label="Address:"
                       fullWidth
-                      value={selectedUser.address ?? ''}
-                      onChange={(e) => {
-                        setSelectedUser({ address: e.target.value });
+                      value={selectedUser.address ?? ""}
+                      onBlur={(e) => {
+                        setSelectedUser({
+                          ...selectedUser,
+                          address: e.target.value,
+                        });
                       }}
                     />
                   </Grid>
@@ -225,23 +284,50 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
                         {
                           title: "Perm",
                           field: "perm",
-                          render: (rowData) => (
-                            <Switch color="primary" value={true} />
-                          ),
+                          render: (rowData) => {
+                            let mask = 1 << rowData.id;
+                            return (
+                              <Switch
+                                color="primary"
+                                checked={(selectedUser.permission & mask) != 0}
+                                onChange={(e) => {
+                                  setSelectedUser({
+                                    ...selectedUser,
+                                    permission: selectedUser.permission ^= mask,
+                                  });
+                                }}
+                              />
+                            );
+                          },
                         },
                         {
                           title: "R/W",
                           field: "r_w",
-                          render: (rowData) => (
-                            <Switch color="primary" value={true} />
-                          ),
+                          render: (rowData) => {
+                            let mask = 1 << rowData.id;
+                            return (
+                              <Switch
+                                color="primary"
+                                checked={
+                                  (selectedUser.rwPermission & mask) != 0
+                                }
+                                onChange={(e) => {
+                                  setSelectedUser({
+                                    ...selectedUser,
+                                    rwPermission: selectedUser.rwPermission ^= mask,
+                                  });
+                                }}
+                              />
+                            );
+                          },
                         },
                       ]}
-                      data={PERMISSION_MENU.map((per) => {
+                      data={PERMISSION_MENU.map((per, id) => {
                         return {
+                          id: id,
                           name: per,
                         };
-                      })}
+                      }).filter((one) => one.name != "")}
                       options={{
                         paging: false,
                         actionsColumnIndex: -1,

@@ -41,14 +41,22 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
 
 interface TaskProps {}
 
 const Task: FunctionalComponent<TaskProps> = (props) => {
   const { user } = props;
   const theme = useTheme();
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [sendUser, setSendUser] = useState(null);
   const [inout, setInout] = useState("inbox");
+  const [editTask, setEditTask] = useState(false);
+  const [editingTask, setEditingTask] = useState({});
+  const [editingIndex, setEditingIndex] = useState(0);
+  const [taskDesc, setTaskDesc] = useState("");
 
   useEffect(() => {
     if (!user) route("/login");
@@ -61,6 +69,45 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
 
   return (
     <Container maxWidth="lg">
+      <Dialog
+        open={editTask}
+        onClose={() => setEditTask(false)}
+        aria-labelledby="form-dialog-title"
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>Task Edit</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            multiline
+            fullWidth
+            value={editingTask.task}
+            onBlur={(e) =>
+              setEditingTask({ ...editingTask, task: e.target.value })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditTask(false)} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              props.saveUserTask({
+                id: editingIndex,
+                task: editingTask,
+                inout,
+              });
+              setEditTask(false);
+            }}
+            color="primary"
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
       <MaterialTable
         title={
           <FormControl>
@@ -90,16 +137,48 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
             icon: "delete",
             iconProps: { style: { color: theme.palette.secondary.main } },
             tooltip: "Remove Task",
-            onClick: (event, rowData) => {
-              // Do save operation
+            onClick: (event, rows) => {
+              props.removeUserTasks({ rows, inout });
+              props[inout].forEach((d) => {
+                if (d.tableData) d.tableData.checked = false;
+              });
             },
           },
         ]}
         columns={[
-          { title: "User name", field: "userName" },
-          { title: "Date", field: "taskDate" },
-          { title: "Time", field: "taskTime" },
-          { title: "Task", field: "task" },
+          {
+            title: "User name",
+            field: "userName",
+            cellStyle: { width: "10%" },
+          },
+          {
+            title: "Date",
+            field: "taskDate",
+            cellStyle: { width: "10%" },
+          },
+          { title: "Time", field: "taskTime", cellStyle: { width: "10%" } },
+          {
+            title: "Task",
+            field: "task",
+            cellStyle: { width: "70%" },
+            headerStyle: { textAlign: "center" },
+            render: (rowData) => {
+              return (
+                <Button
+                  fullWidth
+                  style={{ textAlign: "left" }}
+                  onClick={(_) => {
+                    setEditingIndex(rowData.tableData.id);
+                    setEditingTask(rowData);
+                    setEditTask(true);
+                  }}
+                >
+                  {rowData.task.substring(0, 70) +
+                    (rowData.task.length > 70 ? "..." : "")}
+                </Button>
+              );
+            },
+          },
         ]}
         data={props[inout]}
         options={{
@@ -115,7 +194,24 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
           title="New task"
           action={
             <Tooltip title="Save Task">
-              <IconButton aria-label="save task" color="primary">
+              <IconButton
+                aria-label="save task"
+                color="primary"
+                onClick={(_) => {
+                  if (sendUser == null) {
+                    alert("Please Select User.");
+                    return;
+                  }
+                  if (taskDesc == "") {
+                    alert("Please Input Task Description");
+                    return;
+                  }
+                  props.newUserTask({
+                    id: props.users[sendUser].id,
+                    task: taskDesc,
+                  });
+                }}
+              >
                 <SendIcon />
               </IconButton>
             </Tooltip>
@@ -128,7 +224,7 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
                 columns={[{ title: "User name", field: "userName" }]}
                 data={props.users}
                 onRowClick={(evt, selectedRow) =>
-                  setSelectedRow(selectedRow.tableData.id)
+                  setSendUser(selectedRow.tableData.id)
                 }
                 options={{
                   showTitle: false,
@@ -140,7 +236,7 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
                   maxBodyHeight: 500,
                   rowStyle: (rowData) => ({
                     backgroundColor:
-                      selectedRow === rowData.tableData.id ? "#EEE" : "#FFF",
+                      sendUser === rowData.tableData.id ? "#EEE" : "#FFF",
                   }),
                 }}
               />
@@ -153,6 +249,8 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
                 rows={24}
                 label="Task Description goes here..."
                 variant="filled"
+                value={taskDesc}
+                onBlur={(e) => setTaskDesc(e.target.value)}
               />
             </Grid>
           </Grid>

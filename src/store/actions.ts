@@ -6,6 +6,9 @@ import {
   getUserTask,
   getUserInfo,
   searchProgComment,
+  saveUserTask,
+  saveUserInfo,
+  removeUser,
 } from "../services";
 
 const actions = (store) => ({
@@ -90,6 +93,7 @@ const actions = (store) => ({
       });
       store.setState({ loading: false });
       newWord = { ...newWord, data: results.data };
+      console.log(newWord);
       words.push(newWord);
       store.setState({
         words,
@@ -131,11 +135,78 @@ const actions = (store) => ({
       store.setState({ loading: false });
     }
   },
+  saveUserTask: async (state, data) => {
+    let newData = [...state[data.inout]];
+    newData[data.id] = data.task;
+    actions(store).saveTasks(state, { ...data, newData });
+  },
+  removeUserTasks: async (state, data) => {
+    let newData = [...state[data.inout]];
+    console.log(data.rows);
+    data.rows.map((one) => newData.splice(one.tableData.id, 1));
+    actions(store).saveTasks(state, { ...data, newData });
+  },
+  newUserTask: (state, data) => {
+    let newData = [...state.outbox];
+    newData.push({
+      ...data,
+      from_id: state.user.id,
+      taskDate: new Date().toISOString().split("T")[0],
+      taskTime: new Date().toLocaleTimeString(),
+    });
+    actions(store).saveTasks(state, { ...data, newData, inout: "outbox" });
+    actions(store).loadTasks(state);
+  },
+  saveTasks: async (state, data) => {
+    store.setState({ loading: true });
+    try {
+      await saveUserTask({
+        userId: state.user.id,
+        data: data.newData,
+        inbox: data.inout == "inbox",
+      });
+      if (data.inout == "inbox") store.setState({ inbox: data.newData });
+      if (data.inout == "outbox") store.setState({ outbox: data.newData });
+      store.setState({ loading: false });
+    } catch {
+      store.setState({ loading: false });
+    }
+  },
   loadUsers: async (state) => {
     store.setState({ loading: true });
     try {
-      const users = await getUserInfo({ userId: 0 });
+      let users = await getUserInfo({ userId: 0 });
       store.setState({ users });
+      store.setState({ hasUsersLoaded: true });
+      store.setState({ loading: false });
+    } catch {
+      store.setState({ loading: false });
+    }
+  },
+  saveUserInfo: async (state, user) => {
+    store.setState({ loading: true });
+    try {
+      await saveUserInfo({ user });
+      if (user.id == 0) {
+        actions(store).loadUsers(state);
+      } else {
+        store.setState({
+          users: [...state.users].map((one) => (one.id == user.id ? user : one)),
+        });
+        store.setState({ hasUsersLoaded: true });
+        store.setState({ loading: false });
+      }
+    } catch {
+      store.setState({ loading: false });
+    }
+  },
+  deleteUser: async (state, userId) => {
+    store.setState({ loading: true });
+    try {
+      await removeUser({ id: userId });
+      store.setState({
+        users: [...state.users].filter((one) => one.id != userId),
+      });
       store.setState({ hasUsersLoaded: true });
       store.setState({ loading: false });
     } catch {

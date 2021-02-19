@@ -85,6 +85,7 @@ export const PERMISSION_MENU = [
   "Old Armenian Words",
   "Latin Words",
   "Talyshi Words",
+  "",
   "Concept Caption",
   "Concept Relations",
   "Concept Programs",

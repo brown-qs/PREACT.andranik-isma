@@ -40,3 +40,14 @@ export async function getUserTask(form: any) {
 export async function getUserInfo(form: any) {
   return request.post("/get_user_info", form).then((res) => res);
 }
+
+export async function saveUserTask(form: any) {
+  return request.post("/save_user_task", form).then((res) => res);
+}
+export async function removeUser(form: any) {
+  return request.post("/remove_user", form).then((res) => res);
+}
+
+export async function saveUserInfo(form: any) {
+  return request.post("/save_user_info", form).then((res) => res);
+}
