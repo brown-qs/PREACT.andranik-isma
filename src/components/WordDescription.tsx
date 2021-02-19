@@ -32,6 +32,9 @@ const WordDesciption: FunctionalComponent<WordDesciptionProps> = (props) => {
           rows={20}
           label="Description goes here..."
           variant="filled"
+          onBlur={(e) => {
+            props.updateCurrentWord({ key: "desc", value: e.target.value });
+          }}
           value={currentWordData(props).data.desc ?? ""}
         />
       </Box>

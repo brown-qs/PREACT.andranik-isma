@@ -49,24 +49,6 @@ const WordSynonym: FunctionalComponent = (props) => {
           }}
           actions={[
             {
-              icon: "add",
-              isFreeAction: true,
-              iconProps: { style: { color: theme.palette.primary.main } },
-              tooltip: "Add Synonym",
-              onClick: (event, rowData) => {
-                // Do save operation
-              },
-            },
-            {
-              icon: "delete",
-              iconProps: { style: { color: theme.palette.secondary.main } },
-              tooltip: "Remove Synonym",
-              onClick: (event, rowData) => {
-                // Do save operation
-              },
-              position: 'toolbarOnSelect'
-            },
-            {
               icon: "done_all",
               isFreeAction: true,
               iconProps: { style: { color: theme.palette.primary.main } },
@@ -90,7 +72,7 @@ const WordSynonym: FunctionalComponent = (props) => {
               onClick: (event, rowData) => {
                 // Do save operation
               },
-              position: 'row'
+              position: "row",
             },
             {
               icon: "arrow_downward",
@@ -98,12 +80,44 @@ const WordSynonym: FunctionalComponent = (props) => {
               onClick: (event, rowData) => {
                 // Do save operation
               },
-              position: 'row'
+              position: "row",
             },
           ]}
+          editable={{
+            onBulkUpdate: (changes) =>
+              new Promise<void>((resolve, reject) => {
+                let dataUpdate = [...currentWordData(props).data[COUNTRY_3CODES[language] + "Words"]];
+                Object.keys(changes).map((id) => {
+                  dataUpdate[id] = changes[id].newData;
+                }); 
+                props.updateCurrentWord({key: COUNTRY_3CODES[language] + "Words", value: dataUpdate});
+                resolve();
+              }),
+            onRowAdd: (newData) =>
+              new Promise<void>((resolve, reject) => {
+                let dataUpdate = [...currentWordData(props).data[COUNTRY_3CODES[language] + "Words"]];
+                dataUpdate.push(newData);
+                props.updateCurrentWord({key: COUNTRY_3CODES[language] + "Words", value: dataUpdate});
+                resolve();
+              }),
+            onRowUpdate: (newData, oldData) =>
+              new Promise<void>((resolve, reject) => {
+                let dataUpdate = [...currentWordData(props).data[COUNTRY_3CODES[language] + "Words"]];
+                dataUpdate[oldData.tableData.id] = newData;
+                props.updateCurrentWord({key: COUNTRY_3CODES[language] + "Words", value: dataUpdate});
+                resolve();
+              }),
+            onRowDelete: (oldData) =>
+              new Promise<void>((resolve, reject) => {
+                let dataUpdate = [...currentWordData(props).data[COUNTRY_3CODES[language] + "Words"]];
+                dataUpdate.splice(oldData.tableData.id, 1);
+                props.updateCurrentWord({key: COUNTRY_3CODES[language] + "Words", value: dataUpdate});
+                resolve();
+              }),
+          }}
           columns={[
-            { title: "syn", field: "syn", type: "numeric" },
-            { title: "roots", field: "roots" },
+            { title: "syn", field: "syn", type: "numeric", editable: 'never' },
+            { title: "roots", field: "roots", cellStyle: { width: "50%" } },
             { title: "r1", field: "r1" },
             { title: "d1", field: "d1" },
             { title: "r2", field: "r2" },
@@ -120,13 +134,15 @@ const WordSynonym: FunctionalComponent = (props) => {
               ),
             },
           ]}
-          data={currentWordData(props).data[COUNTRY_3CODES[language] + "Words"] ?? []}
+          data={
+            currentWordData(props).data[COUNTRY_3CODES[language] + "Words"] ??
+            []
+          }
           options={{
             paging: false,
             actionsColumnIndex: -1,
             minBodyHeight: 500,
             maxBodyHeight: 500,
-            selection: true,
           }}
         />
       </Box>

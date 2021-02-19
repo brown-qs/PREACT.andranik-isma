@@ -1,3 +1,4 @@
+import { currentWordData } from "src/utils/redux-getters";
 import { request } from "../services";
 import {
   postLogin,
@@ -112,6 +113,16 @@ const actions = (store) => ({
   setCurrentWord: (state, wordId) => {
     store.setState({ currentWord: wordId });
   },
+  updateCurrentWord: (state, data) => {
+    let prev = [...state.words];
+    let newData = prev.map(one => {
+      if (one.id == state.currentWord) {
+        one.data[data.key] = data.value;
+      }
+      return one;
+     });
+    store.setState({words: newData});
+  }
 
   /***
    * Tasks
@@ -142,7 +153,6 @@ const actions = (store) => ({
   },
   removeUserTasks: async (state, data) => {
     let newData = [...state[data.inout]];
-    console.log(data.rows);
     data.rows.map((one) => newData.splice(one.tableData.id, 1));
     actions(store).saveTasks(state, { ...data, newData });
   },

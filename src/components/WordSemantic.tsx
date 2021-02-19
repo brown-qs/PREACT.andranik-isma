@@ -17,6 +17,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { currentWordData } from "../utils/redux-getters";
 import connectStore from "../store/connect";
+import Link from "@material-ui/core/Link";
+import TextField from "@material-ui/core/TextField";
 
 interface WordSemanticProps {}
 const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
@@ -51,32 +53,12 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
             title="Relations"
             actions={[
               {
-                icon: "add",
-                isFreeAction: true,
-                iconProps: { style: { color: theme.palette.primary.main } },
-                tooltip: "Add Relation",
-                onClick: (event, rowData) => {
-                  // Do save operation
-                },
-              },
-              {
-                icon: "delete",
-                iconProps: {
-                  style: { color: theme.palette.secondary.main },
-                },
-                tooltip: "Remove Relation",
-                onClick: (event, rowData) => {
-                  // Do save operation
-                },
-                position: 'toolbarOnSelect',
-              },
-              {
                 icon: "arrow_upward",
                 tooltip: "Move up",
                 onClick: (event, rowData) => {
                   // Do save operation
                 },
-                position: 'row',
+                position: "row",
               },
               {
                 icon: "arrow_downward",
@@ -84,29 +66,86 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
                 onClick: (event, rowData) => {
                   // Do save operation
                 },
-                position: 'row',
-              },
-              {
-                icon: "read_more",
-                iconProps: { style: { color: theme.palette.primary.main } },
-                tooltip: "Show More",
-                onClick: (event, rowData) => {
-                  // Do save operation
-                },
-                position: 'row',
+                position: "row",
               },
             ]}
+            editable={{
+              onBulkUpdate: (changes) =>
+                new Promise<void>((resolve, reject) => {
+                  let dataUpdate = [...currentWordData(props).data.relations];
+                  Object.keys(changes).map((id) => {
+                    dataUpdate[id] = changes[id].newData;
+                  });
+                  props.updateCurrentWord({
+                    key: "relations",
+                    value: dataUpdate,
+                  });
+                  resolve();
+                }),
+              onRowAdd: (newData) =>
+                new Promise<void>((resolve, reject) => {
+                  let dataUpdate = [...currentWordData(props).data.relations];
+                  dataUpdate.push(newData);
+                  props.updateCurrentWord({
+                    key: "relations",
+                    value: dataUpdate,
+                  });
+                  resolve();
+                }),
+              onRowUpdate: (newData, oldData) =>
+                new Promise<void>((resolve, reject) => {
+                  let dataUpdate = [...currentWordData(props).data.relations];
+                  dataUpdate[oldData.tableData.id] = newData;
+                  props.updateCurrentWord({
+                    key: "relations",
+                    value: dataUpdate,
+                  });
+                  resolve();
+                }),
+              onRowDelete: (oldData) =>
+                new Promise<void>((resolve, reject) => {
+                  let dataUpdate = [...currentWordData(props).data.relations];
+                  dataUpdate.splice(oldData.tableData.id, 1);
+                  props.updateCurrentWord({
+                    key: "relations",
+                    value: dataUpdate,
+                  });
+                  resolve();
+                }),
+            }}
             columns={[
-              { title: "Num", field: "rel_num", type: "numeric" },
+              {
+                title: "Num",
+                field: "rel_num",
+                type: "numeric",
+                editable: "never",
+              },
               { title: "Code1", field: "code1" },
               { title: "Code2", field: "code2" },
-              { title: "Concept Name", field: "conceptName" },
+              {
+                title: "Concept Name",
+                field: "conceptName",
+                render: (rowData) => (
+                  <Link
+                    component="button"
+                    onClick={(_) => {
+                      console.log(rowData);
+                      props.addWord({
+                        id: rowData.conceptID,
+                        lang: currentWordData(props).lang,
+                        word: rowData.conceptName,
+                      });
+                    }}
+                  >
+                    {rowData.conceptName}
+                  </Link>
+                ),
+              },
               { title: "Prob", field: "prob" },
             ]}
             data={currentWordData(props).data.relations ?? []}
             options={{
               paging: false,
-              selection: true,
               actionsColumnIndex: -1,
               minBodyHeight: 500,
               maxBodyHeight: 500,
@@ -118,18 +157,25 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
             <Grid item xs={6}>
               <MaterialTable
                 title="Classes"
-                actions={[
-                  {
-                    icon: "read_more",
-                    iconProps: { style: { color: theme.palette.primary.main } },
-                    tooltip: "Show More",
-                    onClick: (event, rowData) => {
-                      // Do save operation
-                    },
-                  },
-                ]}
                 columns={[
-                  { title: "Concept Name", field: "conceptName" },
+                  {
+                    title: "Concept Name",
+                    field: "conceptName",
+                    render: (rowData) => (
+                      <Link
+                        component="button"
+                        onClick={(_) => {
+                          props.addWord({
+                            id: rowData.id,
+                            lang: currentWordData(props).lang,
+                            word: rowData.conceptName,
+                          });
+                        }}
+                      >
+                        {rowData.conceptName}
+                      </Link>
+                    ),
+                  },
                   { title: "Prob", field: "prob" },
                 ]}
                 data={currentWordData(props).data.classes ?? []}
@@ -144,18 +190,25 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
             <Grid item xs={6}>
               <MaterialTable
                 title="Environments"
-                actions={[
-                  {
-                    icon: "read_more",
-                    iconProps: { style: { color: theme.palette.primary.main } },
-                    tooltip: "Show More",
-                    onClick: (event, rowData) => {
-                      // Do save operation
-                    },
-                  },
-                ]}
                 columns={[
-                  { title: "Concept Name", field: "conceptName" },
+                  {
+                    title: "Concept Name",
+                    field: "conceptName",
+                    render: (rowData) => (
+                      <Link
+                        component="button"
+                        onClick={(_) => {
+                          props.addWord({
+                            id: rowData.id,
+                            lang: currentWordData(props).lang,
+                            word: rowData.conceptName,
+                          });
+                        }}
+                      >
+                        {rowData.conceptName}
+                      </Link>
+                    ),
+                  },
                   { title: "Prob", field: "prob" },
                 ]}
                 data={currentWordData(props).data.environments ?? []}
@@ -172,14 +225,34 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
         {section == 2 && (
           <Grid container spacing={1}>
             <Grid item xs={6}>
-              <FormControl fullWidth>
-                <InputLabel>Type</InputLabel>
-                <Input />
-              </FormControl>
-              <FormControl fullWidth>
-                <InputLabel>Frequency</InputLabel>
-                <Input />
-              </FormControl>
+              <TextField
+                label="Type:"
+                fullWidth
+                value={currentWordData(props).data.caption.type}
+                onBlur={(e) => {
+                  props.updateCurrentWord({
+                    key: "caption",
+                    value: {
+                      ...currentWordData(props).data.caption,
+                      type: e.target.value,
+                    },
+                  });
+                }}
+              />
+              <TextField
+                label="Frequency:"
+                fullWidth
+                value={currentWordData(props).data.caption.prob}
+                onBlur={(e) => {
+                  props.updateCurrentWord({
+                    key: "caption",
+                    value: {
+                      ...currentWordData(props).data.caption,
+                      prob: e.target.value,
+                    },
+                  });
+                }}
+              />
             </Grid>
           </Grid>
         )}

@@ -28,7 +28,7 @@ export class ConceptSearchProperties {
 
   constructor() {
     this.id = "";
-    this.text = "";
+    this.text = "agricultural";
     this.searchAsSubtext = false;
     this.searchInRoots = false;
     this.language = 0;

@@ -19,6 +19,7 @@ import Paper from "@material-ui/core/Paper";
 import { Button, Card } from "../components/StyledMui";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
+import Link from '@material-ui/core/Link'
 import { useTheme } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
@@ -164,9 +165,8 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
             headerStyle: { textAlign: "center" },
             render: (rowData) => {
               return (
-                <Button
-                  fullWidth
-                  style={{ textAlign: "left" }}
+                <Link
+                  component="button"
                   onClick={(_) => {
                     setEditingIndex(rowData.tableData.id);
                     setEditingTask(rowData);
@@ -175,7 +175,7 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
                 >
                   {rowData.task.substring(0, 70) +
                     (rowData.task.length > 70 ? "..." : "")}
-                </Button>
+                </Link>
               );
             },
           },

@@ -17,6 +17,7 @@ import { Grid } from "./StyledMui";
 import MaterialTable from "material-table";
 import { useTheme } from "@material-ui/core/styles";
 import connectStore from "../store/connect";
+import Link from '@material-ui/core/Link'
 import { LANGUAGE_MENU } from "../constants";
 
 const SearchPanel: FunctionalComponent = (props) => {
@@ -31,27 +32,38 @@ const SearchPanel: FunctionalComponent = (props) => {
         <Grid item xs={7}>
           <MaterialTable
             title="Search Results"
-            actions={[
-              {
-                icon: "read_more",
-                iconProps: { style: { color: theme.palette.primary.main } },
-                tooltip: "Open this Item",
-                onClick: (event, rowData) => {
-                  props.addWord(rowData);
-                },
-              },
-            ]}
             columns={[
               {
                 title: "Language",
                 field: "lang",
                 render: (rowData) => LANGUAGE_MENU[rowData.lang],
+                cellStyle: { width: "15%" },
               },
-              { title: "Syn", field: "syn", type: "numeric" },
-              { title: "Word", field: "word" },
+              {
+                title: "Syn",
+                field: "syn",
+                type: "numeric",
+                cellStyle: { width: "10%" },
+              },
+              {
+                title: "Word",
+                field: "word",
+                cellStyle: { width: "40%" },
+                render: (rowData) => (
+                  <Link
+                    component="button"
+                    onClick={(_) => {
+                      props.addWord(rowData);
+                    }}
+                  >
+                    {rowData.word}
+                  </Link>
+                ),
+              },
               {
                 title: "Roots",
                 field: "roots",
+                cellStyle: { width: "30%" },
               },
             ]}
             data={props.searchResults}

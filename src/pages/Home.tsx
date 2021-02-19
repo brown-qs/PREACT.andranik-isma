@@ -124,7 +124,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
                   }}
                 >
                   <DialogContent>
-                    The Current Concept Id is 1_7316
+                    The Current Concept Id is {props.currentWord >> 16}_{props.currentWord & 65535}
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={() => setModalIdOpen(false)}>OK</Button>
