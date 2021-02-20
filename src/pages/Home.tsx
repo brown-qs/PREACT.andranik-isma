@@ -86,7 +86,12 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
             action={
               <Fragment>
                 <Tooltip title="Save">
-                  <IconButton aria-label="save" color="primary">
+                  <IconButton
+                    aria-label="save"
+                    color="primary"
+                    disabled={currentWordData(props).mask == 0}
+                    onClick={(e) => props.saveCurrentConcept()}
+                  >
                     <SaveIcon />
                   </IconButton>
                 </Tooltip>
@@ -124,7 +129,8 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
                   }}
                 >
                   <DialogContent>
-                    The Current Concept Id is {props.currentWord >> 16}_{props.currentWord & 65535}
+                    The Current Concept Id is {props.currentWord >> 16}_
+                    {props.currentWord & 65535}
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={() => setModalIdOpen(false)}>OK</Button>

@@ -1,4 +1,4 @@
-import { currentWordData } from "src/utils/redux-getters";
+import { currentWordData } from "../utils/redux-getters";
 import { request } from "../services";
 import {
   postLogin,
@@ -10,7 +10,9 @@ import {
   saveUserTask,
   saveUserInfo,
   removeUser,
+  saveConcept,
 } from "../services";
+import { CONCEPT_MASKS } from "../constants";
 
 const actions = (store) => ({
   /***
@@ -93,7 +95,7 @@ const actions = (store) => ({
         conceptId: newWord.id,
       });
       store.setState({ loading: false });
-      newWord = { ...newWord, data: results.data };
+      newWord = { ...newWord, data: results.data, mask: 0 };
       console.log(newWord);
       words.push(newWord);
       store.setState({
@@ -115,14 +117,37 @@ const actions = (store) => ({
   },
   updateCurrentWord: (state, data) => {
     let prev = [...state.words];
-    let newData = prev.map(one => {
+    let newData = prev.map((one) => {
       if (one.id == state.currentWord) {
         one.data[data.key] = data.value;
+        one.mask |=
+          1 <<
+          CONCEPT_MASKS.findIndex(
+            (name) =>
+              name ==
+              (data.key.includes("Definition") ? "definition" : data.key)
+          );
       }
       return one;
-     });
-    store.setState({words: newData});
-  }
+    });
+    store.setState({ words: newData });
+  },
+  saveCurrentConcept: async (state) => {
+    store.setState({ loading: true });
+    try {
+      await saveConcept({
+        userId: state.user.id,
+        concept: {
+          id: currentWordData(state).id,
+          mask: currentWordData(state).mask,
+          ...currentWordData(state).data,
+        },
+      });
+      store.setState({ loading: false });
+    } catch {
+      store.setState({ loading: false });
+    }
+  },
 
   /***
    * Tasks
@@ -201,7 +226,9 @@ const actions = (store) => ({
         actions(store).loadUsers(state);
       } else {
         store.setState({
-          users: [...state.users].map((one) => (one.id == user.id ? user : one)),
+          users: [...state.users].map((one) =>
+            one.id == user.id ? user : one
+          ),
         });
         store.setState({ hasUsersLoaded: true });
         store.setState({ loading: false });

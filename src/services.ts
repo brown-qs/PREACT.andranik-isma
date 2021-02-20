@@ -51,3 +51,7 @@ export async function removeUser(form: any) {
 export async function saveUserInfo(form: any) {
   return request.post("/save_user_info", form).then((res) => res);
 }
+export async function saveConcept(form: any) {
+  console.info(form)
+  return request.post("/save_data", form).then((res) => res);
+}
