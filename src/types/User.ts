@@ -3,7 +3,7 @@ export class User {
     this.id = 0;
     this.permission = 0;
     this.rwPermission = 0;
-    this.userName = "unnamed";
+    this.userName = "";
     this.password = "";
     this.fName = "";
     this.lName = "";

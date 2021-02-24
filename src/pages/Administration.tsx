@@ -127,8 +127,16 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
                         color="primary"
                         disabled={!changed}
                         onClick={(e) => {
-                          props.saveUserInfo(selectedUser);
-                          setSelectedUser(new User());
+                          if (selectedUser.userName == "")
+                            alert("Username empty.");
+                          else if (
+                            selectedUser.password != selectedUser.rePassword
+                          ) {
+                            alert("Passwords are not match");
+                          } else {
+                            props.saveUserInfo(selectedUser);
+                            setSelectedUser(new User());
+                          }
                         }}
                       >
                         <SaveIcon />

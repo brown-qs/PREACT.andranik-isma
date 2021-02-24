@@ -154,3 +154,25 @@ export const CONCEPT_MASKS = [
   "prsWords",
   "spnWords",
 ];
+
+export const DEFINITION_LANGUAGE_MENU = [...Array(6).keys()].map((i) => i + 1);
+export const FONT_SIZE_MENU = [
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+];

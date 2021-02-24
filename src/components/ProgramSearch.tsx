@@ -25,7 +25,8 @@ const ProgramSearch: FunctionalComponent = (props) => {
 
   useEffect(() => {
     if (props.searchClick) {
-      props.searchProgComment(progSearchForm);
+      if (progSearchForm.word == "") alert("Please input Word...");
+      else props.searchProgComment(progSearchForm);
     }
   }, [props.searchClick]);
 

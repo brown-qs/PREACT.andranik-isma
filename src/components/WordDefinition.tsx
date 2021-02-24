@@ -14,7 +14,12 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import Checkbox from "@material-ui/core/Checkbox";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import TextField from "@material-ui/core/TextField";
-import { LANGUAGE_MENU, COUNTRY_3CODES } from "../constants";
+import {
+  COUNTRY_3CODES,
+  DEFINITION_LANGUAGE_MENU,
+  LANGUAGE_MENU,
+  FONT_SIZE_MENU,
+} from "../constants";
 import { currentWordData } from "../utils/redux-getters";
 import connectStore from "../store/connect";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -23,6 +28,7 @@ interface WordDefinitionProps {}
 const WordDefinition: FunctionalComponent<WordDefinitionProps> = (props) => {
   const theme = useTheme();
   const [language, setLanguage] = useState(1);
+  const [fontSize, setFontSize] = useState(FONT_SIZE_MENU[0]);
 
   return (
     <Fragment>
@@ -45,9 +51,9 @@ const WordDefinition: FunctionalComponent<WordDefinitionProps> = (props) => {
                   setLanguage(e.target.value);
                 }}
               >
-                {LANGUAGE_MENU.map((item, index) => {
-                  if (index) return <MenuItem value={index}>{item}</MenuItem>;
-                })}
+                {DEFINITION_LANGUAGE_MENU.map((item) => (
+                  <MenuItem value={item}>{LANGUAGE_MENU[item]}</MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -66,40 +72,38 @@ const WordDefinition: FunctionalComponent<WordDefinitionProps> = (props) => {
           multiline
           rows={20}
           variant="filled"
+          onBlur={(e) => {
+            props.updateCurrentWord({
+              key: COUNTRY_3CODES[language] + "Definition",
+              value: e.target.value,
+            });
+          }}
           value={
             currentWordData(props).data[
-              COUNTRY_3CODES[language] + "Definitin"
+              COUNTRY_3CODES[language] + "Definition"
             ] ?? ""
           }
         />
 
-        <Grid container justify="space-between" mt={4}>
-          <Grid item>
-            <FormControl>
-              <InputLabel>Font Name</InputLabel>
-              <Select value={10} native>
-                <option aria-label="None" value="" />
-                <option value={10}>Arabic Transparent</option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
-              </Select>
-            </FormControl>
-            <FormControl ml={4}>
-              <InputLabel>Font Size</InputLabel>
-              <Select value={10} native>
-                <option aria-label="None" value="" />
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={30}>30</option>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <Button variant="contained" color="primary">
-              Save
-            </Button>
-          </Grid>
-        </Grid>
+        <FormControl>
+          <InputLabel>Font Name</InputLabel>
+          <Select>
+            <MenuItem>Times New Roman</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl ml={4}>
+          <InputLabel>Font Size</InputLabel>
+          <Select
+            value={fontSize}
+            onChange={(e) => {
+              setFontSize(e.target.value);
+            }}
+          >
+            {FONT_SIZE_MENU.map((item) => (
+              <MenuItem value={item}>{item}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
     </Fragment>
   );

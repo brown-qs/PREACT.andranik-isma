@@ -29,6 +29,15 @@ export async function getConcept(form: any) {
   return request.post("/get_concept", form).then((res) => res);
 }
 
+export async function getDefinition(form: any) {
+  return request.post("/get_definition", form).then((res) => res);
+}
+
+export async function saveConcept(form: any) {
+  console.info(form)
+  return request.post("/save_data", form).then((res) => res);
+}
+
 /***
  * Tasks
  */
@@ -50,8 +59,4 @@ export async function removeUser(form: any) {
 
 export async function saveUserInfo(form: any) {
   return request.post("/save_user_info", form).then((res) => res);
-}
-export async function saveConcept(form: any) {
-  console.info(form)
-  return request.post("/save_data", form).then((res) => res);
 }

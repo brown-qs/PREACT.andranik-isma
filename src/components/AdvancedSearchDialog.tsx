@@ -54,7 +54,7 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
 
   return (
     <Dialog
-    maxWidth="lg"
+      maxWidth="lg"
       open={props.open}
       onClose={props.onClose}
       aria-labelledby="alert-dialog-title"
@@ -589,7 +589,7 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={e => {
+          onClick={(e) => {
             setSearchForm(new ConceptSearchProperties());
           }}
           variant="contained"
@@ -601,8 +601,11 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
         </Button>
         <Button
           onClick={(e) => {
-            props.onClose();
-            props.searchConcept(searchForm);
+            if (searchForm.text == "") alert("Please Input Searching Text...");
+            else {
+              props.onClose();
+              props.searchConcept(searchForm);
+            }
           }}
           variant="contained"
           color="primary"

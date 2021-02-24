@@ -11,8 +11,13 @@ import {
   saveUserInfo,
   removeUser,
   saveConcept,
+  getDefinition,
 } from "../services";
-import { CONCEPT_MASKS } from "../constants";
+import {
+  CONCEPT_MASKS,
+  COUNTRY_3CODES,
+  DEFINITION_LANGUAGE_MENU,
+} from "../constants";
 
 const actions = (store) => ({
   /***
@@ -88,12 +93,24 @@ const actions = (store) => ({
   },
   addWord: async (state, newWord) => {
     let words = [...state.words];
+    if (words.find((one) => one.id == newWord.id)) {
+      store.setState({
+        currentWord: newWord.id,
+      });
+      return;
+    }
     store.setState({ loading: true });
     try {
-      const results = await getConcept({
+      let results = await getConcept({
         userId: state.user.id,
         conceptId: newWord.id,
       });
+      DEFINITION_LANGUAGE_MENU.forEach(async (lang) => {
+        results.data[COUNTRY_3CODES[lang] + "Definition"] = (
+          await getDefinition({ concetpId: newWord.id, lang })
+        ).html;
+      });
+
       store.setState({ loading: false });
       newWord = { ...newWord, data: results.data, mask: 0 };
       console.log(newWord);
@@ -120,13 +137,8 @@ const actions = (store) => ({
     let newData = prev.map((one) => {
       if (one.id == state.currentWord) {
         one.data[data.key] = data.value;
-        one.mask |=
-          1 <<
-          CONCEPT_MASKS.findIndex(
-            (name) =>
-              name ==
-              (data.key.includes("Definition") ? "definition" : data.key)
-          );
+        let key = data.key.includes("Definition") ? "definition" : data.key;
+        one.mask |= 1 << CONCEPT_MASKS.findIndex((name) => name == key);
       }
       return one;
     });
@@ -144,6 +156,14 @@ const actions = (store) => ({
         },
       });
       store.setState({ loading: false });
+      let prev = [...state.words];
+      let newData = prev.map((one) => {
+        if (one.id == state.currentWord) {
+          one.mask = 0;
+        }
+        return one;
+      });
+      store.setState({ words: newData });
     } catch {
       store.setState({ loading: false });
     }

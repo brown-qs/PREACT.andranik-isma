@@ -36,7 +36,8 @@ const ConceptSearch: FunctionalComponent = (props) => {
 
   useEffect(() => {
     if (props.searchClick) {
-      props.searchConcept(searchForm);
+      if (searchForm.text == '') alert('Please Input Searching Text...');
+      else props.searchConcept(searchForm);
     }
   }, [props.searchClick]);
 

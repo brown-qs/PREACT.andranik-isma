@@ -113,7 +113,7 @@ const SignIn = (props) => {
               name="username"
               autoComplete="username"
               autoFocus
-              error={props.errors != "" || form.userName == ""}
+              error={tried && (props.errors != "" || form.userName == "")}
               value={form.userName}
               onChange={(e) => {
                 setForm((prev) => ({
@@ -140,7 +140,7 @@ const SignIn = (props) => {
               id="password"
               autoComplete="current-password"
               helperText={props.errors}
-              error={props.errors != "" || form.password == ""}
+              error={tried && (props.errors != "" || form.password == "")}
               value={form.password}
               onChange={(e) => {
                 setForm((prev) => ({

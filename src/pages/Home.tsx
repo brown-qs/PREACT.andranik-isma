@@ -86,14 +86,14 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
             action={
               <Fragment>
                 <Tooltip title="Save">
-                  <IconButton
-                    aria-label="save"
-                    color="primary"
-                    disabled={currentWordData(props).mask == 0}
-                    onClick={(e) => props.saveCurrentConcept()}
-                  >
-                    <SaveIcon />
-                  </IconButton>
+                    <IconButton
+                      aria-label="save"
+                      color="primary"
+                      disabled={currentWordData(props).mask == 0}
+                      onClick={(e) => props.saveCurrentConcept()}
+                    >
+                      <SaveIcon />
+                    </IconButton>
                 </Tooltip>
                 <Tooltip title="Test">
                   <IconButton aria-label="test">
