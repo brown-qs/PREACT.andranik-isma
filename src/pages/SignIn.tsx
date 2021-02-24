@@ -22,19 +22,6 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import logo from "../../public/images/logo.jpg";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        ISMA Web Editor
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
@@ -203,9 +190,6 @@ const SignIn = (props) => {
             >
               Sign In
             </Button>
-            <Box mt={5}>
-              <Copyright />
-            </Box>
           </form>
         </div>
       </Grid>
