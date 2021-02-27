@@ -1,8 +1,6 @@
 import { Fragment, FunctionalComponent, h } from "preact";
 import { useState, useEffect } from "preact/hooks";
-import useAllTags from "../hooks/useAllTags";
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
 import MoreVert from "@material-ui/icons/MoreVert";
 import AdvancedSearchDialog from "./AdvancedSearchDialog";
 import Select from "@material-ui/core/Select";
@@ -36,7 +34,10 @@ const ConceptSearch: FunctionalComponent = (props) => {
 
   useEffect(() => {
     if (props.searchClick) {
-      if (searchForm.text == '') alert('Please Input Searching Text...');
+      if (searchForm.text == "")
+        props.enqueueSnackbar("Input at least Searching Text", {
+          variant: "warning",
+        });
       else props.searchConcept(searchForm);
     }
   }, [props.searchClick]);

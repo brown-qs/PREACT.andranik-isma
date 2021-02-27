@@ -57,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = (props) => {
   const classes = useStyles();
-
   const formRef = createRef<HTMLFormElement>();
   const { user, errors } = props;
   const [form, setForm] = useState({

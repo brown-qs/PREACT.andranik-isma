@@ -1,11 +1,9 @@
-import { Fragment, FunctionalComponent, h } from "preact";
+import {  FunctionalComponent, h } from "preact";
 import { useState } from "preact/hooks";
-import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
@@ -13,7 +11,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import MaterialTable, { MTableToolbar } from "material-table";
+import MaterialTable from "material-table";
 import Radio from "@material-ui/core/Radio";
 import CheckIcon from "@material-ui/icons/Check";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -26,7 +24,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import CloseIcon from "@material-ui/icons/Close";
 import SearchIcon from "@material-ui/icons/Search";
 import BlockIcon from "@material-ui/icons/Block";
-import Tooltip from "@material-ui/core/Tooltip";
 import { useTheme } from "@material-ui/core/styles";
 import connectStore from "../store/connect";
 import {
@@ -47,7 +44,6 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
   props
 ) => {
   const theme = useTheme();
-  const [text, setText] = useState("");
   const [searchForm, setSearchForm] = useState<ConceptSearchProperties>(
     new ConceptSearchProperties()
   );

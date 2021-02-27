@@ -1,5 +1,10 @@
 import FetchRequest from "./utils/request";
 
+/***
+ * Services.ts
+ * Here you send Request to Server and recieve Response.
+ */
+
 export const request = new FetchRequest({
   prefix: `${process.env.API_HOST}/api`,
   headers: {
@@ -34,7 +39,6 @@ export async function getDefinition(form: any) {
 }
 
 export async function saveConcept(form: any) {
-  console.info(form)
   return request.post("/save_data", form).then((res) => res);
 }
 

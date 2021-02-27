@@ -1,8 +1,6 @@
 import { FunctionalComponent, h, Fragment } from "preact";
 import PopularTags from "../components/SearchPanel";
-import ArticlePreview from "../components/ArticlePreview";
 import { useEffect, useState } from "preact/hooks";
-import Pagination from "../components/Pagination";
 import { getCurrentUrl, route } from "preact-router";
 import Container from "@material-ui/core/Container";
 import Tabs from "@material-ui/core/Tabs";

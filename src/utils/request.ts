@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                 REQUEST.TS                                  *
+ *                 WE USE FETCH() TO COMMUNICATE WITH BACKEND.                 *
+ * FOR ITS LOW LEVEL INTERFACE, WE DEFINE MORE ADVANCED INTERFACE(CLASS) HERE. *
+ *                        THIS IS USED IN SERVICES.TS.                         *
+ *******************************************************************************/
+
+ 
 import parseStorageGet from './parse-storage-get'
 
 interface FetchRequestOptions {

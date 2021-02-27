@@ -1,10 +1,5 @@
 import { Fragment, FunctionalComponent, h } from "preact";
 import { useState, useEffect } from "preact/hooks";
-import useAllTags from "../hooks/useAllTags";
-import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
-import MoreVert from "@material-ui/icons/MoreVert";
-import AdvancedSearchDialog from "./AdvancedSearchDialog";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -18,7 +13,7 @@ import {
 } from "../constants";
 import { ProgramSearchProperties } from "../types/SearchProperty";
 
-const ProgramSearch: FunctionalComponent = (props) => {
+const ProgramSearch: FunctionalComponent = (props: any) => {
   const [progSearchForm, setProgSearchForm] = useState(
     new ProgramSearchProperties()
   );

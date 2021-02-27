@@ -1,3 +1,7 @@
+/*************************************
+ * TYPES ARE SAME AS CLASSES IN PHP. *
+ *************************************/
+
 export class ConceptSearchProperties {
   id: String;
   text: String;

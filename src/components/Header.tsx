@@ -32,6 +32,7 @@ import { Tooltip } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { SnackbarProvider, VariantType, useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,7 +44,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Header: FunctionalComponent = (props) => {
-  const [value, setValue] = useState(0);
+  const { enqueueSnackbar } = useSnackbar();
+  props.setEnqueueSnackbarFunction(enqueueSnackbar);
   const theme = useTheme();
   const classes = useStyles();
   const actions = [

@@ -1,11 +1,16 @@
+/******************************************************
+ *            STORE DEFINITION & CREATION             *
+ * HERE YOU CAN DEFINE STORE AND GIVE DEFAULT VALUES. *
+ ******************************************************/
+
 import createStore from "redux-zero";
 import parseStorageGet from "../utils/parse-storage-get";
-
 const appStore = (createStore as any)({
   /***
    * System
    */
   loading: false,
+  enqueueSnackbar: (_) => null,
   /***
    * Authentication
    */

@@ -1,3 +1,27 @@
+/*************
+ * COMPONENT *
+ *************
+
+     ||     USER DOES SOMETHING!
+     \/  
+
+ ***********         ************
+ * ACTIONS *   =>    * SERVICES *
+ ***********         ************
+
+     ||            //
+     \/           |/
+
+ ***********
+ *  STORE  *
+ ***********    
+
+     ||      AFFECTS COMPONENT RENDER
+     \/  
+ **************
+ * USER'S EYE *
+ *************/
+
 import { currentWordData } from "../utils/redux-getters";
 import { request } from "../services";
 import {
@@ -19,11 +43,14 @@ import {
   DEFINITION_LANGUAGE_MENU,
 } from "../constants";
 
-const actions = (store) => ({
+const actions = (store: any) => ({
+  setEnqueueSnackbarFunction: (state: any, func: any) => {
+    store.setState({ enqueueSnackbar: func });
+  },
   /***
    * Authentication
    */
-  setErrors: (state, val) => {
+  setErrors: (state: any, val: any) => {
     store.setState({ errors: val });
   },
   updateUser: (state, user) => {
@@ -34,7 +61,7 @@ const actions = (store) => ({
       store.setState({ user: undefined });
     } else {
       // login
-      user = Object.assign({}, state.user, user) as User;
+      user = Object.assign({}, state.user, user);
       global.localStorage.setItem("user", JSON.stringify(user));
       request.options.headers.Authorization = `Token ${user.token}`;
       store.setState({ user });
@@ -50,6 +77,7 @@ const actions = (store) => ({
       } else {
         actions(store).updateUser(state, Object.assign({}, user, form));
         actions(store).setErrors(state, "");
+        state.enqueueSnackbar("Successfully Logged In", { variant: "success" });
       }
     } catch (e) {
       actions(store).setErrors(state, e.errors);
@@ -62,16 +90,12 @@ const actions = (store) => ({
   searchConcept: async (state, form: any) => {
     store.setState({ loading: true });
     try {
-      if (form.baseRole == "ANY") form.baseRole = "";
-      if (form.frequency == "ANY") form.frequency = "";
-      if (form.rootNumber == "ANY") form.rootNumber = "";
-      if (form.synNumber == "ANY") form.synNumber = "";
-      if (form.classDist == "ANY") form.classDist = "";
-      if (form.role == "ANY") form.role = "";
-
+      Object.keys(form).map((key) => form[key] == "ANY" && (form[key] = ""));
       const results = await getSearch({ form });
       store.setState({ loading: false });
       actions(store).setSearchResults(state, results);
+      if (results.length) state.enqueueSnackbar(`Found ${results.length} Results`, { variant: "success" });
+      else state.enqueueSnackbar(`No Results`, { variant: "warning" });
     } catch (e) {
       store.setState({ loading: false });
     }
@@ -155,6 +179,7 @@ const actions = (store) => ({
           ...currentWordData(state).data,
         },
       });
+      state.enqueueSnackbar("Concept Saved.", { variant: "success" });
       store.setState({ loading: false });
       let prev = [...state.words];
       let newData = prev.map((one) => {
