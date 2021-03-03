@@ -20,7 +20,7 @@
   "main": "src/index.tsx",
   "scripts": {
     "start": "(if exist build rmdir build /s/q) && parcel -p 4000 public/index.html --out-dir build",
-    "build": "(if exist build rmdir build /s/q) && parcel build public/index.html --out-dir build",
+    "build": "(if exist dist rmdir dist /s/q) && parcel build public/index.html --out-dir dist",
     "lint": "eslint src/**/*.{tsx,ts}",
     "test": "jest"
   },
