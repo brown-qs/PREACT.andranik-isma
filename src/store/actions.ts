@@ -71,9 +71,11 @@ const actions = (store: any) => ({
     try {
       store.setState({ loading: true });
       const user = await postLogin(form);
+      console.log('login')
       store.setState({ loading: false });
       if (user.id == 0) {
         actions(store).setErrors(state, "Username or Password is incorrect.");
+        state.enqueueSnackbar("Username or Password is incorrect.", { variant: "warning" });
       } else {
         actions(store).updateUser(state, Object.assign({}, user, form));
         actions(store).setErrors(state, "");
