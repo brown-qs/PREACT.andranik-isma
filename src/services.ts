@@ -6,7 +6,7 @@ import FetchRequest from "./utils/request";
  */
 
 export const request = new FetchRequest({
-  prefix: `/api`,
+  prefix: `${process.env.API_HOST}/api`,
   headers: {
     "Content-Type": "application/json",
   },

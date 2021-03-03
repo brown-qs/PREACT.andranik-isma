@@ -71,7 +71,6 @@ const actions = (store: any) => ({
     try {
       store.setState({ loading: true });
       const user = await postLogin(form);
-      console.log('login')
       store.setState({ loading: false });
       if (user.id == 0) {
         actions(store).setErrors(state, "Username or Password is incorrect.");
