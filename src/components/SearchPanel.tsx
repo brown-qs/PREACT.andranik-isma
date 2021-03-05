@@ -14,8 +14,9 @@ import { Grid } from "./StyledMui";
 import MaterialTable from "material-table";
 import { useTheme } from "@material-ui/core/styles";
 import connectStore from "../store/connect";
-import Link from '@material-ui/core/Link'
+import Link from "@material-ui/core/Link";
 import { LANGUAGE_MENU } from "../constants";
+import { Typography } from "@material-ui/core";
 
 const SearchPanel: FunctionalComponent = (props) => {
   const [search_mode, setSearchMode] = useState("concept");
@@ -53,7 +54,7 @@ const SearchPanel: FunctionalComponent = (props) => {
                       props.addWord(rowData);
                     }}
                   >
-                    {rowData.word}
+                    <Typography>{rowData.word}</Typography>
                   </Link>
                 ),
               },

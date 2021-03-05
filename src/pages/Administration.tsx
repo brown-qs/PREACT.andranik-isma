@@ -126,11 +126,15 @@ const Administration: FunctionalComponent<AdministrationProps> = (props) => {
                         disabled={!changed}
                         onClick={(e) => {
                           if (selectedUser.userName == "")
-                            alert("Username empty.");
+                            props.enqueueSnackbar("Information is not enough", {
+                              variant: "warning",
+                            });
                           else if (
                             selectedUser.password != selectedUser.rePassword
                           ) {
-                            alert("Passwords are not match");
+                            props.enqueueSnackbar("Passwords are not match", {
+                              variant: "warning",
+                            });
                           } else {
                             props.saveUserInfo(selectedUser);
                             setSelectedUser(new User());

@@ -140,7 +140,10 @@ const Header: FunctionalComponent = (props) => {
                         <Tooltip title="Log out">
                           <IconButton
                             style={{ color: "white" }}
-                            onClick={(_) => props.updateUser()}
+                            onClick={(_) => {
+                              props.updateUser();
+                              props.resetStore();
+                            }}
                           >
                             <MeetingRoomIcon fontSize="large" />
                           </IconButton>

@@ -19,10 +19,20 @@ import Switch from "@material-ui/core/Switch";
 import MenuItem from "@material-ui/core/MenuItem";
 import connectStore from "../store/connect";
 import { currentWordData } from "../utils/redux-getters";
+import { Word } from "../types/Word";
 
 const WordSynonym: FunctionalComponent = (props) => {
   const theme = useTheme();
   const [language, setLanguage] = useState(currentWordData(props).lang);
+  const checkAndSaveToStore = (dataUpdate) => {
+    dataUpdate = dataUpdate.map((data, ind) => {
+      return { ...data, syn: ind + 1 };
+    });
+    props.updateCurrentWord({
+      key: COUNTRY_3CODES[language] + "Words",
+      value: dataUpdate,
+    });
+  };
   return (
     <Fragment>
       <Box p={2}>
@@ -54,7 +64,14 @@ const WordSynonym: FunctionalComponent = (props) => {
               iconProps: { style: { color: theme.palette.primary.main } },
               tooltip: "Set All Mix",
               onClick: (event, rowData) => {
-                // Do save operation
+                let dataUpdate = [
+                  ...currentWordData(props).data[
+                    COUNTRY_3CODES[language] + "Words"
+                  ],
+                ].map((data) => {
+                  return { ...data, mix: 1 };
+                });
+                checkAndSaveToStore(dataUpdate);
               },
             },
             {
@@ -63,14 +80,31 @@ const WordSynonym: FunctionalComponent = (props) => {
               iconProps: { style: { color: theme.palette.secondary.main } },
               tooltip: "Clear All Mix",
               onClick: (event, rowData) => {
-                // Do save operation
+                let dataUpdate = [
+                  ...currentWordData(props).data[
+                    COUNTRY_3CODES[language] + "Words"
+                  ],
+                ].map((data) => {
+                  return { ...data, mix: 0 };
+                });
+                checkAndSaveToStore(dataUpdate);
               },
             },
             {
               icon: "arrow_upward",
               tooltip: "Move up",
               onClick: (event, rowData) => {
-                // Do save operation
+                if (rowData.syn == 1) return;
+                let dataUpdate = [
+                  ...currentWordData(props).data[
+                    COUNTRY_3CODES[language] + "Words"
+                  ],
+                ];
+                [dataUpdate[rowData.syn - 2], dataUpdate[rowData.syn - 1]] = [
+                  dataUpdate[rowData.syn - 1],
+                  dataUpdate[rowData.syn - 2],
+                ];
+                checkAndSaveToStore(dataUpdate);
               },
               position: "row",
             },
@@ -78,7 +112,18 @@ const WordSynonym: FunctionalComponent = (props) => {
               icon: "arrow_downward",
               tooltip: "Move Down",
               onClick: (event, rowData) => {
-                // Do save operation
+                let dataUpdate = [
+                  ...currentWordData(props).data[
+                    COUNTRY_3CODES[language] + "Words"
+                  ],
+                ];
+                if (rowData.syn == dataUpdate.length) return;
+                console.log(dataUpdate);
+                [dataUpdate[rowData.syn], dataUpdate[rowData.syn - 1]] = [
+                  dataUpdate[rowData.syn - 1],
+                  dataUpdate[rowData.syn],
+                ];
+                checkAndSaveToStore(dataUpdate);
               },
               position: "row",
             },
@@ -86,37 +131,56 @@ const WordSynonym: FunctionalComponent = (props) => {
           editable={{
             onBulkUpdate: (changes) =>
               new Promise<void>((resolve, reject) => {
-                let dataUpdate = [...currentWordData(props).data[COUNTRY_3CODES[language] + "Words"]];
+                let dataUpdate = [
+                  ...currentWordData(props).data[
+                    COUNTRY_3CODES[language] + "Words"
+                  ],
+                ];
                 Object.keys(changes).map((id) => {
                   dataUpdate[id] = changes[id].newData;
-                }); 
-                props.updateCurrentWord({key: COUNTRY_3CODES[language] + "Words", value: dataUpdate});
+                });
+                checkAndSaveToStore(dataUpdate);
                 resolve();
               }),
-            onRowAdd: (newData) =>
+            onRowAdd: (_newData) =>
               new Promise<void>((resolve, reject) => {
-                let dataUpdate = [...currentWordData(props).data[COUNTRY_3CODES[language] + "Words"]];
+                let newData = { ...new Word(), ..._newData };
+                console.log(newData);
+                let dataUpdate = [
+                  ...currentWordData(props).data[
+                    COUNTRY_3CODES[language] + "Words"
+                  ],
+                ];
                 dataUpdate.push(newData);
-                props.updateCurrentWord({key: COUNTRY_3CODES[language] + "Words", value: dataUpdate});
+                checkAndSaveToStore(dataUpdate);
                 resolve();
               }),
             onRowUpdate: (newData, oldData) =>
               new Promise<void>((resolve, reject) => {
-                let dataUpdate = [...currentWordData(props).data[COUNTRY_3CODES[language] + "Words"]];
+                let dataUpdate = [
+                  ...currentWordData(props).data[
+                    COUNTRY_3CODES[language] + "Words"
+                  ],
+                ];
+                console.log(newData);
                 dataUpdate[oldData.tableData.id] = newData;
-                props.updateCurrentWord({key: COUNTRY_3CODES[language] + "Words", value: dataUpdate});
+                checkAndSaveToStore(dataUpdate);
                 resolve();
               }),
             onRowDelete: (oldData) =>
               new Promise<void>((resolve, reject) => {
-                let dataUpdate = [...currentWordData(props).data[COUNTRY_3CODES[language] + "Words"]];
+                let dataUpdate = [
+                  ...currentWordData(props).data[
+                    COUNTRY_3CODES[language] + "Words"
+                  ],
+                ];
                 dataUpdate.splice(oldData.tableData.id, 1);
-                props.updateCurrentWord({key: COUNTRY_3CODES[language] + "Words", value: dataUpdate});
+                checkAndSaveToStore(dataUpdate);
                 resolve();
               }),
           }}
           columns={[
-            { title: "syn", field: "syn", type: "numeric", editable: 'never' },
+            { title: "syn", field: "syn", type: "numeric", editable: "never" },
             { title: "roots", field: "roots", cellStyle: { width: "50%" } },
             { title: "r1", field: "r1" },
             { title: "d1", field: "d1" },

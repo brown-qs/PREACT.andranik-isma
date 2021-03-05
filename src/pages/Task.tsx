@@ -19,7 +19,7 @@ import Paper from "@material-ui/core/Paper";
 import { Button, Card } from "../components/StyledMui";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
-import Link from '@material-ui/core/Link'
+import Link from "@material-ui/core/Link";
 import { useTheme } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
@@ -149,7 +149,7 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
         columns={[
           {
             title: "User name",
-            field: "userName",
+            field: inout == "inbox" ? "userName" : "currUserName",
             cellStyle: { width: "10%" },
           },
           {
@@ -173,8 +173,10 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
                     setEditTask(true);
                   }}
                 >
-                  {rowData.task.substring(0, 70) +
-                    (rowData.task.length > 70 ? "..." : "")}
+                  <Typography>
+                    {rowData.task.substring(0, 70) +
+                      (rowData.task.length > 70 ? "..." : "")}
+                  </Typography>
                 </Link>
               );
             },
@@ -199,11 +201,15 @@ const Task: FunctionalComponent<TaskProps> = (props) => {
                 color="primary"
                 onClick={(_) => {
                   if (sendUser == null) {
-                    alert("Please Select User.");
+                    props.enqueueSnackbar("Please Select User", {
+                      variant: "warning",
+                    });
                     return;
                   }
                   if (taskDesc == "") {
-                    alert("Please Input Task Description");
+                    props.enqueueSnackbar("Please Input Task Description", {
+                      variant: "warning",
+                    });
                     return;
                   }
                   props.newUserTask({

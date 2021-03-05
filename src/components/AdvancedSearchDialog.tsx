@@ -597,7 +597,11 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
         </Button>
         <Button
           onClick={(e) => {
-            if (searchForm.text == "") alert("Please Input Searching Text...");
+            if (searchForm.text == "" && searchForm.className == "") {
+              props.enqueueSnackbar("Input Searching Text or Class Name", {
+                variant: "warning",
+              });
+            }
             else {
               props.onClose();
               props.searchConcept(searchForm);

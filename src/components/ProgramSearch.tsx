@@ -20,7 +20,10 @@ const ProgramSearch: FunctionalComponent = (props: any) => {
 
   useEffect(() => {
     if (props.searchClick) {
-      if (progSearchForm.word == "") alert("Please input Word...");
+      if (progSearchForm.word == "")
+        props.enqueueSnackbar("Input at least Word", {
+          variant: "warning",
+        });
       else props.searchProgComment(progSearchForm);
     }
   }, [props.searchClick]);

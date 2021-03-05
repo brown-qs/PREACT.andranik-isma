@@ -67,6 +67,11 @@ const actions = (store: any) => ({
       store.setState({ user });
     }
   },
+  resetStore: (state) => {
+    store.setState({ searchResults: [], words: [], currentWord: null });
+    store.setState({ hasTaskLoaded: false, inbox: [], outbox: [] });
+    store.setState({ hasUsersLoaded: false, users: [] });
+  },
   login: async (state, form: any) => {
     try {
       store.setState({ loading: true });
@@ -74,7 +79,9 @@ const actions = (store: any) => ({
       store.setState({ loading: false });
       if (user.id == 0) {
         actions(store).setErrors(state, "Username or Password is incorrect.");
-        state.enqueueSnackbar("Username or Password is incorrect.", { variant: "warning" });
+        state.enqueueSnackbar("Username or Password is incorrect.", {
+          variant: "warning",
+        });
       } else {
         actions(store).updateUser(state, Object.assign({}, user, form));
         actions(store).setErrors(state, "");
@@ -95,7 +102,10 @@ const actions = (store: any) => ({
       const results = await getSearch({ form });
       store.setState({ loading: false });
       actions(store).setSearchResults(state, results);
-      if (results.length) state.enqueueSnackbar(`Found ${results.length} Results`, { variant: "success" });
+      if (results.length)
+        state.enqueueSnackbar(`Found ${results.length} Results`, {
+          variant: "success",
+        });
       else state.enqueueSnackbar(`No Results`, { variant: "warning" });
     } catch (e) {
       store.setState({ loading: false });

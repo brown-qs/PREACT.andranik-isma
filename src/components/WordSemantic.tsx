@@ -19,6 +19,7 @@ import { currentWordData } from "../utils/redux-getters";
 import connectStore from "../store/connect";
 import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
+import { Typography } from "@material-ui/core";
 
 interface WordSemanticProps {}
 const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
@@ -137,7 +138,7 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
                       });
                     }}
                   >
-                    {rowData.conceptName}
+                    <Typography>{rowData.conceptName}</Typography>
                   </Link>
                 ),
               },
@@ -172,7 +173,7 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
                           });
                         }}
                       >
-                        {rowData.conceptName}
+                        <Typography>{rowData.conceptName}</Typography>
                       </Link>
                     ),
                   },
@@ -205,7 +206,7 @@ const WordSemantic: FunctionalComponent<WordSemanticProps> = (props) => {
                           });
                         }}
                       >
-                        {rowData.conceptName}
+                        <Typography>{rowData.conceptName}</Typography>
                       </Link>
                     ),
                   },
