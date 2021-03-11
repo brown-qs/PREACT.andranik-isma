@@ -25,13 +25,21 @@ const WordSynonym: FunctionalComponent = (props) => {
   const theme = useTheme();
   const [language, setLanguage] = useState(currentWordData(props).lang);
   const checkAndSaveToStore = (dataUpdate) => {
+    let valid = true;
     dataUpdate = dataUpdate.map((data, ind) => {
+      if (data.roots == "" || data.r1 == "" || data.d1 == "") valid = false;
       return { ...data, syn: ind + 1 };
     });
-    props.updateCurrentWord({
-      key: COUNTRY_3CODES[language] + "Words",
-      value: dataUpdate,
-    });
+    if (valid)
+      props.updateCurrentWord({
+        key: COUNTRY_3CODES[language] + "Words",
+        value: dataUpdate,
+      });
+    else
+      props.enqueueSnackbar("At least Roots, R1, D1 are required.", {
+        variant: "warning",
+      });
+    return valid;
   };
   return (
     <Fragment>
@@ -71,7 +79,8 @@ const WordSynonym: FunctionalComponent = (props) => {
                 ].map((data) => {
                   return { ...data, mix: 1 };
                 });
-                checkAndSaveToStore(dataUpdate);
+                if (checkAndSaveToStore(dataUpdate)) resolve();
+                else reject();
               },
             },
             {
@@ -87,7 +96,8 @@ const WordSynonym: FunctionalComponent = (props) => {
                 ].map((data) => {
                   return { ...data, mix: 0 };
                 });
-                checkAndSaveToStore(dataUpdate);
+                if (checkAndSaveToStore(dataUpdate)) resolve();
+                else reject();
               },
             },
             {
@@ -104,7 +114,8 @@ const WordSynonym: FunctionalComponent = (props) => {
                   dataUpdate[rowData.syn - 1],
                   dataUpdate[rowData.syn - 2],
                 ];
-                checkAndSaveToStore(dataUpdate);
+                if (checkAndSaveToStore(dataUpdate)) resolve();
+                else reject();
               },
               position: "row",
             },
@@ -123,7 +134,8 @@ const WordSynonym: FunctionalComponent = (props) => {
                   dataUpdate[rowData.syn - 1],
                   dataUpdate[rowData.syn],
                 ];
-                checkAndSaveToStore(dataUpdate);
+                if (checkAndSaveToStore(dataUpdate)) resolve();
+                else reject();
               },
               position: "row",
             },
@@ -139,21 +151,20 @@ const WordSynonym: FunctionalComponent = (props) => {
                 Object.keys(changes).map((id) => {
                   dataUpdate[id] = changes[id].newData;
                 });
-                checkAndSaveToStore(dataUpdate);
-                resolve();
+                if (checkAndSaveToStore(dataUpdate)) resolve();
+                else reject();
               }),
             onRowAdd: (_newData) =>
               new Promise<void>((resolve, reject) => {
                 let newData = { ...new Word(), ..._newData };
-                console.log(newData);
                 let dataUpdate = [
                   ...currentWordData(props).data[
                     COUNTRY_3CODES[language] + "Words"
                   ],
                 ];
                 dataUpdate.push(newData);
-                checkAndSaveToStore(dataUpdate);
-                resolve();
+                if (checkAndSaveToStore(dataUpdate)) resolve();
+                else reject();
               }),
             onRowUpdate: (newData, oldData) =>
               new Promise<void>((resolve, reject) => {
@@ -164,8 +175,8 @@ const WordSynonym: FunctionalComponent = (props) => {
                 ];
                 console.log(newData);
                 dataUpdate[oldData.tableData.id] = newData;
-                checkAndSaveToStore(dataUpdate);
-                resolve();
+                if (checkAndSaveToStore(dataUpdate)) resolve();
+                else reject();
               }),
             onRowDelete: (oldData) =>
               new Promise<void>((resolve, reject) => {
@@ -175,15 +186,15 @@ const WordSynonym: FunctionalComponent = (props) => {
                   ],
                 ];
                 dataUpdate.splice(oldData.tableData.id, 1);
-                checkAndSaveToStore(dataUpdate);
-                resolve();
+                if (checkAndSaveToStore(dataUpdate)) resolve();
+                else reject();
               }),
           }}
           columns={[
             { title: "syn", field: "syn", type: "numeric", editable: "never" },
             { title: "roots", field: "roots", cellStyle: { width: "50%" } },
-            { title: "r1", field: "r1" },
-            { title: "d1", field: "d1" },
+            { title: "r1", field: "r1", initialEditValue: "0" },
+            { title: "d1", field: "d1", initialEditValue: "0" },
             { title: "r2", field: "r2" },
             { title: "d2", field: "d2" },
             { title: "r3", field: "r3" },
