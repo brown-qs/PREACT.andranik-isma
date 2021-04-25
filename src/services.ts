@@ -42,6 +42,13 @@ export async function saveConcept(form: any) {
   return request.post("/save_data", form).then((res) => res);
 }
 
+export async function deleteConcept(form: any) {
+  return request.post("/delete_concept", form).then((res) => res);
+}
+
+export async function testConcept(form: any) {
+  return request.post("/test_concept", form).then((res) => res);
+}
 /***
  * Tasks
  */

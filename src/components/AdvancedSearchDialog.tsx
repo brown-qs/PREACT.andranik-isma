@@ -379,6 +379,7 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
                       ...searchForm,
                       relations: [...searchForm.relations, newData],
                     });
+                    console.log(newData)
                     resolve();
                   }),
                 onRowUpdate: (newData, oldData) =>
@@ -426,18 +427,20 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
                 },
               ]}
               columns={[
-                { title: "C1", field: "code1" },
-                { title: "C2", field: "code2" },
-                { title: "Concept Name", field: "conceptName" },
-                { title: "Prob", field: "prob" },
+                { title: "C1", field: "code1", initialEditValue: ''},
+                { title: "C2", field: "code2", initialEditValue: '' },
+                { title: "Concept Name", field: "conceptName", initialEditValue: '' },
+                { title: "Prob", field: "prob", initialEditValue: '' },
                 {
                   title: "Inv",
                   field: "inv",
+                  initialEditValue: 0,
                   lookup: { 0: <RemoveIcon />, 1: <CheckIcon /> },
                 },
                 {
                   title: "&/|",
                   field: "andor",
+                  initialEditValue: 0,
                   lookup: { 0: <RemoveIcon />, 1: <CheckIcon /> },
                 },
               ]}
@@ -597,8 +600,8 @@ const AdvancedSearchDialog: FunctionalComponent<AdvancedSearchDialogProps> = (
         </Button>
         <Button
           onClick={(e) => {
-            if (searchForm.text == "" && searchForm.className == "") {
-              props.enqueueSnackbar("Input Searching Text or Class Name", {
+            if (searchForm.text == "" && searchForm.className == "" && searchForm.relations.length == 0) {
+              props.enqueueSnackbar("Input Searching Text or Class Name or any Relations.", {
                 variant: "warning",
               });
             }

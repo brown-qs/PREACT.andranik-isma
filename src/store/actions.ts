@@ -36,6 +36,8 @@ import {
   removeUser,
   saveConcept,
   getDefinition,
+  deleteConcept,
+  testConcept,
 } from "../services";
 import {
   CONCEPT_MASKS,
@@ -164,8 +166,56 @@ const actions = (store: any) => ({
       words: [...state.words].filter((val) => val.id != wordId),
     });
   },
+  deleteCurrentWord: async (state) => {
+    store.setState({ loading: true });
+    try {
+      let result = await deleteConcept({userId: state.user.id, conceptId: state.currentWord})
+      store.setState({ loading: false });
+      console.log(result)
+      if (result.error_code == 1) {
+        state.enqueueSnackbar(result.error_string, {
+          variant: "warning",
+        });
+      } else {
+        actions(store).removeWord(state, state.currentWord);
+      }
+    } catch {
+      store.setState({ loading: false });
+
+    }
+  },
   setCurrentWord: (state, wordId) => {
     store.setState({ currentWord: wordId });
+  },
+  testCurrentConcept: async (state) => {
+    if (currentWordData(state).mask == 0) {
+      state.enqueueSnackbar("No changes to Test", {
+        variant: "warning",
+      });
+      return;
+    }
+    store.setState({ loading: true });
+    try {
+      let result = await testConcept({
+        concept: {
+          id: currentWordData(state).id,
+          mask: currentWordData(state).mask,
+          ...currentWordData(state).data,
+        }
+      })
+      store.setState({ loading: false });
+      if (result.error_code == 1) {
+        state.enqueueSnackbar(result.error_string, {
+          variant: "warning",
+        });
+      } else {
+        state.enqueueSnackbar("The Data Testing Successfully has been Done", {
+          variant: "success",
+        });
+      }
+    } catch {
+      store.setState({ loading: false });
+    }
   },
   updateCurrentWord: (state, data) => {
     let prev = [...state.words];

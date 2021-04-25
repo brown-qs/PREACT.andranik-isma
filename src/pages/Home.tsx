@@ -35,6 +35,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import SearchIcon from "@material-ui/icons/Search";
 import { currentWordData } from "../utils/redux-getters";
 import Badge from "@material-ui/core/Badge";
+import { DoneAll } from "@material-ui/icons";
 
 interface HomeProps {}
 
@@ -42,6 +43,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
   const { user } = props;
   const [tab, setTab] = useState("syn");
   const [modalIdOpen, setModalIdOpen] = useState(false);
+  const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
 
   useEffect(() => {
     if (!user) route("/login");
@@ -59,9 +61,11 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
               color={props.currentWord == word.id ? "primary" : "default"}
               onClick={() => {
                 props.setCurrentWord(word.id);
+                setTab("syn");
               }}
               onDelete={() => {
                 props.removeWord(word.id);
+                setTab("syn");
               }}
             />
           ))}
@@ -71,6 +75,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
             color={props.currentWord ? "default" : "primary"}
             onClick={() => {
               props.setCurrentWord(null);
+              setTab("syn");
             }}
           >
             <Badge badgeContent={props.searchResults.length} color="secondary">
@@ -96,7 +101,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Test">
-                  <IconButton aria-label="test">
+                  <IconButton aria-label="test" onClick={(e) => props.testCurrentConcept()}>
                     <AssignmentTurnedInIcon />
                   </IconButton>
                 </Tooltip>
@@ -106,7 +111,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete Concept">
-                  <IconButton aria-label="delete" color="secondary">
+                  <IconButton aria-label="delete" color="secondary" onClick={(e) => setModalDeleteOpen(true)}>
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>
@@ -136,6 +141,14 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
                     <Button onClick={() => setModalIdOpen(false)}>OK</Button>
                   </DialogActions>
                 </Dialog>
+                <Dialog open={modalDeleteOpen} onClose={() => setModalDeleteOpen(false)}>
+                  <DialogTitle>Are you sure to delete this Concept?</DialogTitle>
+                  <DialogActions>
+                    <Button onClick={(e) => setModalDeleteOpen(false)} color="default">Cancel</Button>
+                    <Button onClick={(e) => { setModalDeleteOpen(false); props.deleteCurrentWord(); }} color="secondary">OK</Button>
+                  </DialogActions>
+                </Dialog>
+
               </Fragment>
             }
             title={currentWordData(props).word}

@@ -23,7 +23,7 @@ import { Word } from "../types/Word";
 
 const WordSynonym: FunctionalComponent = (props) => {
   const theme = useTheme();
-  const [language, setLanguage] = useState(currentWordData(props).lang);
+  const [language, setLanguage] = useState(1);
   const checkAndSaveToStore = (dataUpdate) => {
     let valid = true;
     dataUpdate = dataUpdate.map((data, ind) => {
