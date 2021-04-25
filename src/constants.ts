@@ -228,3 +228,38 @@ export const FONT_SIZE_MENU = [
   24,
   25,
 ];
+
+/***
+ * Concept Theme
+ */
+
+export const CONCEPT_THEME_LIST = [
+  { label: "Auto Detect", labelField: 0 },
+  { label: "Vol0", labelField: 1 },
+  { label: "Vol1", labelField: 2 },
+  { label: "Vol2", labelField: 3 },
+  { label: "Vol3", labelField: 4 },
+  { label: "Mathematics", labelField: 5 },
+  { label: "Physics", labelField: 6 },
+  { label: "Chemistry", labelField: 7 },
+  { label: "Techniques", labelField: 9 },
+  { label: "Informatics", labelField: 10 },
+  { label: "Medicine", labelField: 11 },
+  { label: "Biology", labelField: 12 },
+  { label: "Economics", labelField: 13 },
+  { label: "Jurisprudence/Law", labelField: 14 },
+  { label: "Geology", labelField: 15 },
+  { label: "Military", labelField: 16 },
+  { label: "Subject of Art", labelField: 17 },
+  { label: "Chess Player/Footballer Names", labelField: 18 },
+  { label: "Phis./Math./Biol. Names", labelField: 19 },
+  { label: "Philosopher  Names", labelField: 20 },
+  { label: "Cathol./Pres./Astr. Names", labelField: 21 },
+  { label: "Epic Hero/God", labelField: 22 },
+  { label: "Arts", labelField: 23 },
+  { label: "Personal Names", labelField: 24 },
+  { label: "Surenames", labelField: 25 },
+  { label: "Inanimate Names", labelField: 26 },
+  { label: "Linguistic", labelField: 27 },
+  { label: "Construction/Building", labelField: 28 },
+];

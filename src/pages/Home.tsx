@@ -6,6 +6,13 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem"
 import WordSynonym from "../components/WordSynonym";
 import WordSemantic from "../components/WordSemantic";
 import WordPrograms from "../components/WordPrograms";
@@ -36,6 +43,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { currentWordData } from "../utils/redux-getters";
 import Badge from "@material-ui/core/Badge";
 import { DoneAll } from "@material-ui/icons";
+import { CONCEPT_THEME_LIST } from "../constants";
 
 interface HomeProps {}
 
@@ -44,6 +52,9 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
   const [tab, setTab] = useState("syn");
   const [modalIdOpen, setModalIdOpen] = useState(false);
   const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
+  const [modalCreateOpen, setModalCreateOpen] = useState(false);
+  const [theme, setTheme] = useState(0);
+  const [copy, setCopy] = useState({ caption: false, words: false, relations: false, programs: false, description: false });
 
   useEffect(() => {
     if (!user) route("/login");
@@ -106,7 +117,7 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="New Concept">
-                  <IconButton aria-label="new">
+                  <IconButton aria-label="new" onClick={(e) => setModalCreateOpen(true)}>
                     <CreateIcon />
                   </IconButton>
                 </Tooltip>
@@ -127,6 +138,119 @@ const Home: FunctionalComponent<HomeProps> = (props) => {
                     ID
                   </Button>
                 </Tooltip>
+
+                <Dialog
+                  maxWidth="lg"
+                  open={modalCreateOpen}
+                  onClose={() => {
+                    setModalCreateOpen(false);
+                  }}
+                >
+                  <DialogTitle>
+                    Create New Concept
+                  </DialogTitle>
+                  <DialogContent>
+                    <FormControl fullWidth>
+                      <InputLabel>Concept Theme</InputLabel>
+                      <Select
+                        onChange={(e) => {
+                          setTheme(e.target.value);
+                        }}
+                        value={theme}
+                      >
+                        {CONCEPT_THEME_LIST.map((item, index) => (
+                          <MenuItem value={item.labelField}>{item.label}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+
+                    <FormControlLabel
+                      fullWidth
+                      control={
+                        <Checkbox
+                          onChange={(e) => {
+                            setCopy({
+                              ...copy,
+                              caption: e.target.checked,
+                            });
+                          }}
+                          color="primary"
+                          checked={copy.caption}
+                        />
+                      }
+                      label="Copy Caption"
+                    />
+                    <FormControlLabel
+                      fullWidth
+                      control={
+                        <Checkbox
+                          onChange={(e) => {
+                            setCopy({
+                              ...copy,
+                              words: e.target.checked,
+                            });
+                          }}
+                          color="primary"
+                          checked={copy.words}
+                        />
+                      }
+                      label="Copy Words"
+                    />
+                    <FormControlLabel
+                      fullWidth
+                      control={
+                        <Checkbox
+                          onChange={(e) => {
+                            setCopy({
+                              ...copy,
+                              relations: e.target.checked,
+                            });
+                          }}
+                          color="primary"
+                          checked={copy.relations}
+                        />
+                      }
+                      label="Copy Relations"
+                    />
+                    <FormControlLabel
+                      fullWidth
+                      control={
+                        <Checkbox
+                          onChange={(e) => {
+                            setCopy({
+                              ...copy,
+                              programs: e.target.checked,
+                            });
+                          }}
+                          color="primary"
+                          checked={copy.programs}
+                        />
+                      }
+                      label="Copy Programs"
+                    />
+                    <FormControlLabel
+                      fullWidth
+                      control={
+                        <Checkbox
+                          onChange={(e) => {
+                            setCopy({
+                              ...copy,
+                              description: e.target.checked,
+                            });
+                          }}
+                          color="primary"
+                          checked={copy.description}
+                        />
+                      }
+                      label="Copy Description"
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={(e) => setModalCreateOpen(false)} color="default">Cancel</Button>
+                    <Button onClick={(e) => { setModalCreateOpen(false); props.createConcept(theme, copy); }} color="primary">OK</Button>
+                  </DialogActions>
+                </Dialog>
+
                 <Dialog
                   open={modalIdOpen}
                   onClose={() => {

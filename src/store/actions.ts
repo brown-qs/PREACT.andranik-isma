@@ -38,6 +38,7 @@ import {
   getDefinition,
   deleteConcept,
   testConcept,
+  createConcept,
 } from "../services";
 import {
   CONCEPT_MASKS,
@@ -213,6 +214,54 @@ const actions = (store: any) => ({
           variant: "success",
         });
       }
+    } catch {
+      store.setState({ loading: false });
+    }
+  },
+  createConcept: async (state, theme, copy) => {
+    store.setState({ loading: true });
+    try {
+      let conceptId = await createConcept({
+        userId: state.user.id,
+        theme
+      })
+      store.setState({ loading: false });
+
+      if(conceptId ==  0) {
+        state.enqueueSnackbar("Unable to create concept, Converter Server is stopped", {
+          variant: "warning",
+        });
+        return;
+      }
+      const num = conceptId & 65535;
+      const vol = conceptId >> 16;
+      if(num == 0 || (vol ==  1 && num >= 1 && num <= 1000)) {
+        state.enqueueSnackbar("Unable to create concept", {
+          variant: "warning",
+        });
+        return;
+      }
+      const currentData = currentWordData(state);
+      let newData = { id: conceptId, data: currentData.data };
+      newData.word = copy.caption ? currentData.word : '';
+      Object.keys(currentData.data).map(key => {
+        if (!copy.words && key.indexOf('Words') != -1) {
+          newData.data[key] = [];
+        }
+        if (!copy.relations && key == 'relations') {
+          newData.data[key] = [];
+        }
+        if (!copy.programs && key == 'programs') {
+          newData.data[key] = [];
+        }
+        if (!copy.description && key == 'desc') {
+          newData.data[key] = '';
+        }
+        if (key.indexOf('Definition') != -1) {
+          newData.data[key] = '';
+        }
+      });
+      actions(store).addWord(state, newData);
     } catch {
       store.setState({ loading: false });
     }

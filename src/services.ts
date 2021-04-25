@@ -49,6 +49,10 @@ export async function deleteConcept(form: any) {
 export async function testConcept(form: any) {
   return request.post("/test_concept", form).then((res) => res);
 }
+
+export async function createConcept(form: any) {
+  return request.post("/create_concept", form).then((res) => res);
+}
 /***
  * Tasks
  */
